@@ -3,62 +3,101 @@
 body {
     background-color: #FFD580; /* Laranja claro */
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
-.header {
-    background: #f5f5f5;
-    padding: 10px;
+/* Banner */
+.banner {
+    width: 100%; /* Ocupa toda a largura da tela */
+    margin: 0 auto; /* Centraliza o banner horizontalmente */
+    padding: 10px 0;
+    margin-bottom: 40px; /* Ajusta o espaço entre o banner e o quadrado central */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 350px; /* Define a altura do banner */
+    
 }
 
 .banner img {
-    max-width: 100%;
-    height: auto;
+    width: 100%; /* Ajusta a largura da imagem para ocupar todo o espaço do banner */
+    height: auto; /* Mantém a proporção da imagem */
+    max-width: 2200px; /* Define a largura máxima da imagem para evitar que ela fique muito grande em telas maiores */
+    object-fit: cover; /* Ajusta a imagem para preencher o espaço sem distorção */
+    border-radius: 8px;
 }
 
+
+
+/* Container */
 .container {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    padding: 20px; /* Adiciona um pouco de espaço ao redor da área do quadrado central */
+    padding: 30px; /* Adiciona espaço ao redor da área do quadrado central */
     box-sizing: border-box;
 }
 
+/* Conteúdo Principal */
 .main-content {
     display: flex;
     flex: 1;
     background-color: #ffffff;
     border-radius: 8px;
     overflow: hidden;
-    position: relative; /* Para que o footer possa ser posicionado absoluto dentro dele */
+    position: relative; /* Para posicionamento absoluto do footer */
+    /*padding-left: 20px;  Aumenta o espaço à esquerda */
+    padding-right: 30px; /* Aumenta o espaço à direita */
 }
 
+
+/* Menu Lateral */
 .sidebar {
     width: 250px;
     background-color: #f2f2f2;
     border-right: 2px solid #ddd;
     display: flex;
     flex-direction: column;
+    margin-left: 5px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px 0 0 8px; /* Bordas arredondadas no lado esquerdo */
 }
 
 .sidebar ul {
     list-style: none;
-    padding: 0;
+    padding: 5px;
     margin: 0;
 }
 
 .sidebar ul li {
     padding: 15px;
     transition: background-color 0.3s, color 0.3s;
+    border-bottom: 1px solid #ddd; /* Linha separadora entre os itens */
 }
 
 .sidebar ul li a {
-    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 15px 10px;
     color: #333;
-    display: block;
-    font-weight: bold;
-    transition: color 0.3s;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar ul li a::before {
+    margin-right: 10px;
+    font-size: 20px;
+    transition: transform 0.3s;
+}
+
+.sidebar ul li a i {
+    margin-right: 10px; 
+}
+
+
+
+.sidebar ul li:hover a::before {
+    transform: scale(1.2);
 }
 
 .sidebar ul li a:hover {
@@ -67,6 +106,7 @@ body {
 
 .sidebar ul li.active {
     background-color: #e89c38; /* Cor de fundo para item ativo */
+    border-radius: 4px; /* Bordas arredondadas para item ativo */
 }
 
 .sidebar ul li.active a {
@@ -77,13 +117,14 @@ body {
     background-color: #f0f0f0; /* Cor de fundo quando o mouse passa sobre o item */
     cursor: pointer;
 }
-
+/* Conteúdo Principal */
 .content {
     padding: 20px;
     flex: 1;
     margin-left: 250px; /* Espaço para o menu lateral */
 }
 
+/* Footer */
 .footer {
     background-color: #f5f5f5;
     text-align: center;
@@ -91,7 +132,7 @@ body {
     border-top: 2px solid #ddd;
     position: absolute;
     bottom: 0;
-    left: 250px; /* Alinhado com o conteúdo da área principal */
-    width: calc(100% - 250px); /* Ocupa a largura restante do quadrado central */
+    width: 100% ; /* Ocupa a largura restante do quadrado central */
     box-sizing: border-box;
+    border-radius: 0 0 8px 8px; /* Bordas arredondadas na parte inferior */
 }

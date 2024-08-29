@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Lanchonete{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Lanchonete{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    </head>
 <body>
     <!-- Banner Superior -->
     <header class="banner">
@@ -18,13 +19,24 @@
             <!-- Menu Lateral -->
             <nav class="sidebar">
                 <ul>
-                    <li class="{% if active_page == 'home' %}active{% endif %}"><a href="{{ url_for('main.home') }}">Home</a></li>
-                    <li class="{% if active_page == 'cardapio' %}active{% endif %}"><a href="{{ url_for('main.cardapio') }}">Cardápio</a></li>
-                    <li class="{% if active_page == 'anotar_pedido' %}active{% endif %}"><a href="{{ url_for('main.anotar_pedido') }}">Anotar Pedido</a></li>
-                    <li class="{% if active_page == 'acompanhar_pedidos' %}active{% endif %}"><a href="{{ url_for('main.acompanhar_pedidos') }}">Acompanhar Pedidos</a></li>
-                    <li class="{% if active_page == 'relatorios_vendas' %}active{% endif %}"><a href="{{ url_for('main.relatorios_vendas') }}">Relatórios de Vendas</a></li>
+                    <li class="{% if active_page == 'home' %}active{% endif %}">
+                        <a href="{{ url_for('main.home') }}"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="{% if active_page == 'cardapio' %}active{% endif %}">
+                        <a href="{{ url_for('main.cardapio') }}"><i class="fas fa-utensils"></i> Cardápio</a>
+                    </li>
+                    <li class="{% if active_page == 'anotar_pedido' %}active{% endif %}">
+                        <a href="{{ url_for('main.anotar_pedido') }}"><i class="fas fa-calendar-alt"></i> Anotar Pedido</a>
+                    </li>
+                    <li class="{% if active_page == 'acompanhar_pedidos' %}active{% endif %}">
+                        <a href="{{ url_for('main.acompanhar_pedidos') }}"><i class="fas fa-map-marker-alt"></i> Acompanhar Pedidos</a>
+                    </li>
+                    <li class="{% if active_page == 'relatorios_vendas' %}active{% endif %}">
+                        <a href="{{ url_for('main.relatorios_vendas') }}"><i class="fas fa-file-alt"></i> Relatórios de Vendas</a>
+                    </li>
                 </ul>
             </nav>
+
 
             <!-- Conteúdo Principal -->
             <div class="content">
