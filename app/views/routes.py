@@ -9,7 +9,7 @@ def home():
 
 @bp.route('/cardapio')
 def cardapio():
-    return render_template('cardapio.html', active_page='cardapio')
+    return render_template('cardapio/cardapio.html', active_page='cardapio')
 
 @bp.route('/anotar_pedido')
 def anotar_pedido():
@@ -22,3 +22,13 @@ def acompanhar_pedidos():
 @bp.route('/relatorios_vendas')
 def relatorios_vendas():
     return render_template('relatorios_vendas.html', active_page='relatorios_vendas')
+
+#Telas do cardapio
+
+@bp.route('/cardapio/adicionar')
+def adicionar():
+    return render_template('cardapio/adicionar.html', active_page='cardapio')
+
+@bp.route('/cardapio/listagem')
+def listagem():
+    return render_template('cardapio/listagem.html', active_page='cardapio')

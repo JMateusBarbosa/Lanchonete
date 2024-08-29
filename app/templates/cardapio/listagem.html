@@ -1,0 +1,39 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Listagem de Itens{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="listagem-main-content">
+    <h1 id="listagem-title">Listagem de Itens</h1>
+    
+    <div class="search-bar" id="listagem-search-bar">
+        <input type="text" id="search" placeholder="Buscar itens...">
+    </div>
+    
+    <table class="item-table" id="listagem-item-table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Preço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Exemplo de item. Esses dados seriam dinâmicos na implementação final -->
+            <tr>
+                <td>Item Exemplo</td>
+                <td>R$ 20,00</td>
+                <td>
+                    <a href="#" class="btn btn-edit">Editar</a>
+                    <a href="#" class="btn btn-delete">Excluir</a>
+                </td>
+            </tr>
+            <!-- Adicione mais itens conforme necessário -->
+        </tbody>
+    </table>
+</div>
+{% endblock %}

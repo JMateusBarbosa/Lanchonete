@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Adicionar Item{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="adicionar-main-content">
+    <h1 id="adicionar-title">Adicionar Novo Item</h1>
+    
+    <form class="add-item-form" id="adicionar-form">
+        <label for="item-name">Nome do Item:</label>
+        <input type="text" id="item-name" name="item_name" required>
+        
+        <label for="item-price">Preço:</label>
+        <input type="text" id="item-price" name="item_price" required>
+        
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Cardápio{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="cardapio-main-content">
+    <h1 id="cardapio-title">Cardápio</h1>
+    <p id="cardapio-description">Aqui você pode gerenciar os itens do cardápio.</p>
+    
+    <div class="button-group" id="cardapio-button-group">
+        <a href="{{ url_for('main.listagem') }}" class="btn btn-primary">Listar Itens</a>
+        <a href="{{ url_for('main.adicionar') }}" class="btn btn-secondary">Adicionar Item</a>
+    </div>
+</div>
+{% endblock %}
