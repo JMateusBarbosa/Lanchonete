@@ -1,11 +1,25 @@
 /* Layout do cardápio */
 #cardapio-main-content {
+    display: block; /* Força os elementos a ficarem em blocos, um abaixo do outro */
     padding: 20px;
     max-width: 800px;
     margin: 0 auto;
     text-align: center; /* Centraliza os elementos no conteúdo principal */
 }
-
+#listagem-main-content {
+    display: block; /* Força os elementos a ficarem em blocos, um abaixo do outro */
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center; /* Centraliza os elementos no conteúdo principal */
+}
+#adicionar-main-content {
+    display: block; /* Força os elementos a ficarem em blocos, um abaixo do outro */
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center; /* Centraliza os elementos no conteúdo principal */
+}
 #cardapio-title {
     font-size: 24px;
     margin-bottom: 10px;
@@ -56,23 +70,102 @@
     background-color: #e0e0e0;
 }
 
-/* Tabela de Itens */
+/* Estilização da tabela */
 #listagem-item-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Remove espaços entre células */
     margin-top: 20px;
+    font-size: 16px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar a tabela */
 }
 
-#listagem-item-table th, #listagem-item-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+/* Cabeçalho da tabela */
+#listagem-item-table thead {
+    background-color: #e89c38; /* Cor de fundo laranja para o cabeçalho */
+    color: white; /* Cor do texto em branco */
 }
 
 #listagem-item-table th {
-    background-color: #f2f2f2;
+    padding: 12px 15px; /* Espaçamento interno */
+    text-align: left; /* Alinha o texto à esquerda */
+    font-weight: bold; /* Deixa o texto em negrito */
 }
 
+/* Corpo da tabela */
+#listagem-item-table tbody tr {
+    border-bottom: 1px solid #ddd; /* Linha divisória suave */
+}
+
+#listagem-item-table td {
+    padding: 10px 15px; /* Espaçamento interno */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+/* Alternância de cores para as linhas da tabela */
+#listagem-item-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Cor de fundo cinza claro para linhas pares */
+}
+
+#listagem-item-table tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* Cor de fundo branco para linhas ímpares */
+}
+
+/* Estilização dos botões dentro da tabela */
+#listagem-item-table .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-decoration: none; /* Remove o sublinhado dos links */
+    margin-right: 5px; /* Espaçamento entre botões */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#listagem-item-table .btn-edit {
+    background-color: #e89c38; /* Cor de fundo laranja para o botão de editar */
+    color: white; /* Cor do texto em branco */
+}
+
+#listagem-item-table .btn-edit:hover {
+    background-color: #d78a2a; /* Cor de fundo mais escura ao passar o mouse */
+}
+
+#listagem-item-table .btn-delete {
+    background-color: #f2f2f2; /* Cor de fundo cinza para o botão de excluir */
+    color: #333; /* Cor do texto escura */
+}
+
+#listagem-item-table .btn-delete:hover {
+    background-color: #e0e0e0; /* Cor de fundo mais escura ao passar o mouse */
+}
+
+/* Estilização da barra de busca */
+#listagem-search-bar {
+    width: 100%; /* Ocupa toda a largura disponível */
+    max-width: 600px; /* Limita a largura máxima da barra de busca */
+    margin: 20px auto; /* Centraliza a barra de busca na tela */
+    padding: 10px; /* Adiciona espaço interno ao redor da barra */
+    background-color: #f2f2f2; /* Cor de fundo suave */
+    border-radius: 8px; /* Bordas arredondadas */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar a barra */
+    display: flex; /* Usa flexbox para alinhar o conteúdo */
+    align-items: center; /* Centraliza verticalmente o conteúdo */
+}
+
+/* Estilização do campo de busca */
+#listagem-search-bar input[type="text"] {
+    width: 100%; /* Ocupa toda a largura disponível dentro da barra */
+    padding: 10px; /* Adiciona espaço interno ao campo de entrada */
+    border: 1px solid #ddd; /* Borda cinza suave */
+    border-radius: 8px; /* Bordas arredondadas */
+    font-size: 16px; /* Tamanho da fonte */
+    outline: none; /* Remove o contorno padrão ao focar */
+    transition: border-color 0.3s; /* Suaviza a mudança de cor da borda ao focar */
+}
+
+/* Estilo ao focar no campo de busca */
+#listagem-search-bar input[type="text"]:focus {
+    border-color: #e89c38; /* Muda a cor da borda ao focar */
+}
 /* Formulário de Adição */
 #adicionar-form {
     display: flex;

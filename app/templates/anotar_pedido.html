@@ -2,8 +2,70 @@
 
 {% block title %}Anotar Pedido{% endblock %}
 
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/anotar_pedido.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Anotar Pedido</h1>
-<p>Aqui você pode anotar um novo pedido.</p>
-<!-- Conteúdo adicional específico para anotar pedidos -->
+<h1 class="page-title">Anotar Pedido</h1>
+
+<div class="order-form">
+    <!-- Lista de Itens do Cardápio -->
+    <div class="menu-list">
+        <h2>Seleção de Itens</h2>
+        <table class="menu-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantidade</th>
+                    <th>Selecionar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo de item do cardápio -->
+                <tr>
+                    <td>Hambúrguer</td>
+                    <td><input type="number" min="1" value="1"></td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <tr>
+                    <td>Refrigerante</td>
+                    <td><input type="number" min="1" value="1"></td>
+                    <td><input type="checkbox"></td>
+                </tr>
+                <!-- Adicione mais itens conforme necessário -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Dados do Cliente/Mesa -->
+    <div class="customer-info">
+        <h2>Dados do Cliente/Mesa</h2>
+        <label for="customer-name">Nome do Cliente:</label>
+        <input type="text" id="customer-name" placeholder="Digite o nome do cliente">
+        <label for="table-number">Número da Mesa:</label>
+        <input type="text" id="table-number" placeholder="Digite o número da mesa">
+    </div>
+
+    <!-- Resumo do Pedido -->
+    <div class="order-summary">
+        <h2>Resumo do Pedido</h2>
+        <div class="summary-content">
+            <!-- Itens selecionados e resumo do pedido aparecerão aqui -->
+            <p>Nenhum item selecionado.</p>
+        </div>
+    </div>
+
+    <!-- Feedback do Cliente -->
+    <div class="customer-feedback">
+        <h2>Feedback do Cliente</h2>
+        <textarea id="feedback" placeholder="Insira uma nota ou feedback do cliente"></textarea>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="action-buttons">
+        <button class="btn-confirm">Confirmar Pedido</button>
+        <button class="btn-cancel">Cancelar Pedido</button>
+    </div>
+</div>
 {% endblock %}
