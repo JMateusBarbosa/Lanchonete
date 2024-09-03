@@ -2,8 +2,72 @@
 
 {% block title %}Acompanhar Pedidos{% endblock %}
 
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/acompanhar_pedidos.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Acompanhar Pedidos</h1>
-<p>Aqui você pode acompanhar o status dos pedidos.</p>
-<!-- Conteúdo adicional específico para acompanhar pedidos -->
+<h1 class="page-title">Acompanhar Pedidos</h1>
+
+<!-- Barra de Ferramentas Superior -->
+<div class="toolbar">
+    <div class="search-bar">
+        <input type="text" id="search" placeholder="Buscar por pedido, mesa ou cliente...">
+    </div>
+    <div class="filters">
+        <select id="filter-status">
+            <option value="all">Todos</option>
+            <option value="pending">Pendentes</option>
+            <option value="completed">Concluídos</option>
+        </select>
+        <select id="filter-time">
+            <option value="all">Todos os tempos</option>
+            <option value="30m">Últimos 30 minutos</option>
+            <option value="1h">Última hora</option>
+            <option value="today">Hoje</option>
+        </select>
+    </div>
+    <div class="update-controls">
+        <button id="refresh-button">Atualizar</button>
+        <div class="auto-refresh">
+            <input type="checkbox" id="auto-refresh" checked>
+            <label for="auto-refresh">Atualização automática</label>
+        </div>
+    </div>
+</div>
+
+<!-- Tabela de Pedidos -->
+<table class="orders-table">
+    <thead>
+        <tr>
+            <th>ID do Pedido</th>
+            <th>Hora</th>
+            <th>Mesa/Cliente</th>
+            <th>Itens</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Exemplo de linha de pedido -->
+        <tr class="order-row" data-status="pending">
+            <td>001</td>
+            <td>12:30</td>
+            <td>Mesa 5</td>
+            <td>2x Hambúrguer, 1x Batata Frita</td>
+            <td class="status-cell">
+                <span class="status pending">Pendente</span>
+                <button class="status-toggle">Concluir</button>
+            </td>
+            <td class="actions-cell">
+                <button class="expand-details">Ver Detalhes</button>
+            </td>
+        </tr>
+        <!-- Mais linhas de pedidos -->
+    </tbody>
+</table>
+
+<!-- Notificações em Tempo Real -->
+<div id="notifications"></div>
+
 {% endblock %}

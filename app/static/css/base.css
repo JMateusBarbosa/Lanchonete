@@ -47,7 +47,7 @@ body {
     overflow: hidden;
     position: relative; /* Para posicionamento absoluto do footer */
     /*padding-left: 20px;  Aumenta o espaço à esquerda */
-    padding-right: 30px; /* Aumenta o espaço à direita */
+    padding-right: 60px; /* Aumenta o espaço à direita */
 }
 
 
@@ -61,6 +61,7 @@ body {
     margin-left: 5px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     border-radius: 8px 0 0 8px; /* Bordas arredondadas no lado esquerdo */
+    
 }
 
 .sidebar ul {

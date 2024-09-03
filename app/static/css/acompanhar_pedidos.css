@@ -1,0 +1,220 @@
+/* Título da Página */
+.page-title {
+    font-size: 26px;
+    margin-bottom: 25px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Barra de Ferramentas */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Barra de Pesquisa */
+.search-bar {
+    flex-grow: 1;
+    max-width: 450px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #FFA500; /* Laranja */
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input:focus {
+    border-color: #FF8C00; /* Laranja escuro ao focar */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Filtros */
+.filters select {
+    margin-right: 10px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.filters select:focus {
+    border-color: #FFA500;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Controle de Atualização */
+.update-controls {
+    display: flex;
+    align-items: center;
+}
+
+#refresh-button {
+    padding: 10px 15px;
+    background-color: #FFA500; /* Laranja */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#refresh-button:hover {
+    background-color: #FF8C00; /* Laranja escuro */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+#refresh-button:focus {
+    outline: none;
+    box-shadow: 0px 0px 0px 3px rgba(255, 165, 0, 0.4);
+}
+
+.auto-refresh label {
+    margin-left: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Tabela de Pedidos */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.orders-table th, .orders-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.orders-table th {
+    background-color: #f8f8f8;
+}
+
+.orders-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.orders-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Status de Pedidos */
+.status.pending {
+    color: #FF0000; /* Vermelho */
+    font-weight: bold;
+}
+
+.status.completed {
+    color: #28a745; /* Verde */
+    font-weight: bold;
+}
+
+.actions-cell button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.actions-cell button:hover {
+    background-color: #0056b3; /* Azul escuro */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Notificações */
+#notifications {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#notifications.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#notifications.hide {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* Botão Concluir */
+.btn-concluir {
+    background-color: #28a745; /* Verde */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-concluir:hover {
+    background-color: #218838; /* Verde mais escuro ao passar o mouse */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-concluir:active {
+    background-color: #1e7e34; /* Verde ainda mais escuro ao clicar */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-concluir:disabled {
+    background-color: #6c757d; /* Cinza */
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Estilo adicional para garantir responsividade */
+@media (max-width: 768px) {
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .search-bar, .filters select, #refresh-button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .filters select, #refresh-button {
+        max-width: 400px;
+    }
+
+    .auto-refresh {
+        margin-top: 10px;
+    }
+
+    .orders-table th, .orders-table td {
+        padding: 10px;
+    }
+}
