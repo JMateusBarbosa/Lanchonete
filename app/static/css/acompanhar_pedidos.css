@@ -1,9 +1,8 @@
 /* Título da Página */
 .page-title {
-    font-size: 26px;
-    margin-bottom: 25px;
-    color: #333;
-    font-weight: bold;
+    text-align: center;
+    color: #e89c38;
+    margin-bottom: 20px;
 }
 
 /* Barra de Ferramentas */

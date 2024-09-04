@@ -21,8 +21,9 @@
     text-align: center; /* Centraliza os elementos no conteúdo principal */
 }
 #cardapio-title {
-    font-size: 24px;
-    margin-bottom: 10px;
+    text-align: center;
+    color: #e89c38;
+    margin-bottom: 20px;
 }
 
 #cardapio-description {
@@ -69,6 +70,13 @@
 .btn-secondary:hover {
     background-color: #e0e0e0;
 }
+
+#listagem-title {
+    text-align: center;
+    color: #e89c38;
+    margin-bottom: 20px;
+}
+
 
 /* Estilização da tabela */
 #listagem-item-table {
@@ -165,6 +173,13 @@
 /* Estilo ao focar no campo de busca */
 #listagem-search-bar input[type="text"]:focus {
     border-color: #e89c38; /* Muda a cor da borda ao focar */
+}
+
+
+#adicionar-title {
+    text-align: center;
+    color: #e89c38;
+    margin-bottom: 20px;
 }
 /* Formulário de Adição */
 #adicionar-form {

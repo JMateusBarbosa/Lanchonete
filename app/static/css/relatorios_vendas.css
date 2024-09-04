@@ -1,0 +1,111 @@
+/* Estilo do título da página */
+.page-title {
+    text-align: center;
+    color: #e89c38;
+    margin-bottom: 20px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.barra-ferramentas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.barra-ferramentas .filtros label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.barra-ferramentas .filtros input,
+.barra-ferramentas .filtros select {
+    margin-right: 20px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.barra-ferramentas .botao-aplicar {
+    padding: 10px 20px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.barra-ferramentas .botao-aplicar:hover {
+    background-color: #e67e00;
+}
+.barra-ferramentas .botao-exportar {
+    padding: 10px 20px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.barra-ferramentas .botao-exportar:hover {
+    background-color: #e67e00;
+}
+
+.tabela-relatorio table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.tabela-relatorio table thead {
+    background-color: #f2f2f2;
+}
+
+.tabela-relatorio table th,
+.tabela-relatorio table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabela-relatorio table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.tabela-relatorio .ver-detalhes {
+    padding: 5px 10px;
+    background-color: #ff8c00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.tabela-relatorio .ver-detalhes:hover {
+    background-color: #e67e00;
+}
+
+.resumo-financeiro {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+}
+
+.resumo-financeiro .resumo-item {
+    text-align: center;
+    flex: 1;
+    margin: 0 10px;
+}
+
+.resumo-financeiro .resumo-item h3 {
+    margin-bottom: 10px;
+    color: #ff8c00;
+}
+
+.resumo-financeiro .resumo-item p {
+    font-size: 18px;
+    font-weight: bold;
+}

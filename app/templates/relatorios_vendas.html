@@ -2,8 +2,89 @@
 
 {% block title %}Relatórios de Vendas{% endblock %}
 
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/relatorios_vendas.css') }}">
+{% endblock %}
+
 {% block content %}
-<h1>Relatórios de Vendas</h1>
-<p>Aqui você pode visualizar os relatórios de vendas.</p>
-<!-- Conteúdo adicional específico para relatórios de vendas -->
+<h1 class="page-title">Relatórios de Vendas</h1>
+<div class="relatorio-container">
+    <!-- Barra de Ferramentas Superior -->
+    <div class="barra-ferramentas">
+        <div class="filtros">
+            <label for="data-inicio">Data Início:</label>
+            <input type="date" id="data-inicio" name="data-inicio">
+
+            <label for="data-fim">Data Fim:</label>
+            <input type="date" id="data-fim" name="data-fim">
+
+            <select id="categoria-produto">
+                <option value="todas">Todas as Categorias</option>
+                <option value="bebidas">Bebidas</option>
+                <option value="lanches">Lanches</option>
+                <option value="sobremesas">Sobremesas</option>
+            </select>
+
+            <select id="tipo-pagamento">
+                <option value="todos">Todos os Pagamentos</option>
+                <option value="dinheiro">Dinheiro</option>
+                <option value="cartao">Cartão</option>
+                <option value="cartao">PIX</option>
+            </select>
+            <button class="botao-aplicar">Aplicar</button>
+        </div>
+
+        <button class="botao-exportar">Exportar Relatório</button>
+    </div>
+
+    <!-- Tabela de Relatório de Vendas -->
+    <div class="tabela-relatorio">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID da Venda</th>
+                    <th>Data/Hora</th>
+                    <th>Cliente/Mesa</th>
+                    <th>Itens Vendidos</th>
+                    <th>Total</th>
+                    <th>Tipo de Pagamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo de linha de venda -->
+                <tr>
+                    <td>001</td>
+                    <td>2024-08-29 12:45</td>
+                    <td>Mesa 5</td>
+                    <td>Burger, Refrigerante</td>
+                    <td>R$ 35,00</td>
+                    <td>Cartão</td>
+                    <td><button class="ver-detalhes">Ver Detalhes</button></td>
+                </tr>
+                <!-- Mais linhas de exemplo -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Resumo Financeiro -->
+    <div class="resumo-financeiro">
+        <div class="resumo-item">
+            <h3>Total de Vendas</h3>
+            <p>R$ 500,00</p>
+        </div>
+        <div class="resumo-item">
+            <h3>Número de Vendas</h3>
+            <p>15</p>
+        </div>
+        <div class="resumo-item">
+            <h3>Média por Venda</h3>
+            <p>R$ 33,33</p>
+        </div>
+        <div class="resumo-item">
+            <h3>Produtos Mais Vendidos</h3>
+            <p>Burger, Refrigerante</p>
+        </div>
+    </div>
+</div>
 {% endblock %}
