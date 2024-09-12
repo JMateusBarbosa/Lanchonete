@@ -26,20 +26,25 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Exemplo de item. Esses dados seriam dinâmicos na implementação final -->
+            {% for item in itens %}
             <tr>
-                <th>001</th>
-                <td>X-Tudo</td>
-                <th>pão, carne ...</th>
-                <td>R$ 20,00</td>
-                <th>Disponivel</th>
+                <th>{{ item.id_item }}</th>
+                <td>{{ item.nome_item }}</td>
+                <td>{{ item.descricao }}</td>
+                <td>R$ {{ item.preco }}</td>
+                <td>{{ 'Disponível' if item.disponivel else 'Indisponível' }}</td>
                 <td>
-                    <a href="#" class="btn btn-edit">Editar</a>
-                    <a href="#" class="btn btn-delete">Excluir</a>
+                    <a href="{{ url_for('main.editar_item', id=item.id_item) }}" class="btn btn-edit">Editar</a>
+                    <form action="{{ url_for('main.excluir_item', id=item.id_item) }}" method="post" style="display:inline;">
+                        <!-- Adicione um campo oculto para o token CSRF -->
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-delete" onclick="return confirm('Tem certeza que deseja excluir este item?');">Excluir</button>
+                    </form>
                 </td>
             </tr>
-            <!-- Adicione mais itens conforme necessário -->
+            {% endfor %}
         </tbody>
+        
     </table>
 </div>
 {% endblock %}

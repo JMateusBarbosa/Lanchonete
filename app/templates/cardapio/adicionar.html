@@ -7,17 +7,36 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Mensagens de feedback -->
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+
 <div class="main-content" id="adicionar-main-content">
     <h1 id="adicionar-title">Adicionar Novo Item</h1>
     
-    <form class="add-item-form" id="adicionar-form">
+    <form class="add-item-form" id="adicionar-form" action="{{ url_for('main.adicionar') }}" method="POST">
+        {{ form.hidden_tag() }}
+        
         <label for="item-name">Nome do Item:</label>
-        <input type="text" id="item-name" name="item_name" required>
+        {{ form.nome_item() }}
         
         <label for="item-price">Preço:</label>
-        <input type="text" id="item-price" name="item_price" required>
+        {{ form.preco_item() }}
+        
+        <label for="item-description">Descrição:</label>
+        {{ form.descricao_item() }}
         
         <button type="submit" class="btn btn-primary">Adicionar</button>
     </form>
+    
 </div>
 {% endblock %}

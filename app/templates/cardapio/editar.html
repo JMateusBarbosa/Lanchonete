@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Editar Item{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="main-content" id="editar-main-content">
+    <h1 id="editar-title">Editar Item</h1>
+    
+    <form class="edit-item-form" id="editar-form" method="post" action="{{ url_for('main.editar_item', id=item.id_item) }}">
+        {{ form.hidden_tag() }} <!-- Adicione esta linha -->
+        
+        <label for="item-name">Nome do Item:</label>
+        {{ form.nome_item() }}
+        
+        <label for="item-price">Preço:</label>
+        {{ form.preco_item() }}
+        
+        <label for="item-description">Descrição:</label>
+        {{ form.descricao_item() }}
+        
+        <label for="item-availability">Disponível:</label>
+        {{ form.disponivel() }}
+        
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+</div>
+{% endblock %}
