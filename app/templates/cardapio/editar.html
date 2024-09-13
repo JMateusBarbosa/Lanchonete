@@ -11,7 +11,7 @@
     <h1 id="editar-title">Editar Item</h1>
     
     <form class="edit-item-form" id="editar-form" method="post" action="{{ url_for('main.editar_item', id=item.id_item) }}">
-        {{ form.hidden_tag() }} <!-- Adicione esta linha -->
+        {{ form.hidden_tag() }} 
         
         <label for="item-name">Nome do Item:</label>
         {{ form.nome_item() }}

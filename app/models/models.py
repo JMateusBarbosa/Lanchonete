@@ -84,3 +84,9 @@ class RelatorioVendas(db.Model):
     def __repr__(self):
         return f"<RelatorioVendas(id_relatorio={self.id_relatorio}, data_inicio={self.data_inicio}, data_fim={self.data_fim})>"
 
+class Item(db.Model):
+    id_item = db.Column(db.Integer, primary_key=True)
+    nome_item = db.Column(db.String(80), nullable=False)
+    descricao = db.Column(db.String(200))
+    preco = db.Column(db.Float, nullable=False)
+    disponivel = db.Column(db.Boolean, default=True)

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app import db
 from app.models.models import ItemCardapio
 from app.forms.addCardapio import ItemForm
@@ -73,7 +73,6 @@ def editar_item(id):
     
     return render_template('cardapio/editar.html', form=form, item=item, active_page='cardapio')
 
-
 @bp.route('/cardapio/excluir/<int:id>', methods=['POST'])
 def excluir_item(id):
     item = ItemCardapio.query.get_or_404(id)
@@ -85,6 +84,30 @@ def excluir_item(id):
         db.session.rollback()
         flash(f'Ocorreu um erro ao excluir o item: {str(e)}', 'error')
     return redirect(url_for('main.listagem'))
+
+# Rota de busca para search-bar da tela de listagem
+
+@bp.route('/buscar_itens')
+def buscar_itens():
+    query = request.args.get('q', '', type=str)
+    if query:
+        itens = ItemCardapio.query.filter(ItemCardapio.nome_item.ilike(f'%{query}%')).all()
+    else:
+        itens = ItemCardapio.query.all()
+
+    itens_data = [
+        {
+            'id_item': item.id_item,
+            'nome_item': item.nome_item,
+            'descricao': item.descricao,
+            'preco': f'{item.preco:.2f}',
+            'disponivel': 'Sim' if item.disponivel else 'Não'
+        }
+        for item in itens
+    ]
+
+    return jsonify(itens_data)
+
 
 
 

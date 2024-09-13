@@ -215,3 +215,72 @@
 #adicionar-form button:hover {
     background-color: #d78a2a;
 }
+
+/* Tela editar */
+/* Layout do formulário de edição */
+#editar-main-content {
+    display: block;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#editar-title {
+    text-align: center;
+    color: #e89c38;
+    margin-bottom: 20px;
+}
+
+/* Formulário de Edição */
+#editar-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #f9f9f9; /* Cor de fundo suave */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
+#editar-form label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+#editar-form input,
+#editar-form textarea,
+#editar-form select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+    width: 100%; /* Largura total */
+}
+
+#editar-form input:focus,
+#editar-form textarea:focus,
+#editar-form select:focus {
+    border-color: #e89c38; /* Cor de destaque ao focar */
+    outline: none; /* Remove o contorno padrão */
+}
+
+/* Botão de salvar */
+#editar-form button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #e89c38;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#editar-form button:hover {
+    background-color: #d78a2a;
+}

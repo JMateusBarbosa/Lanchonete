@@ -11,40 +11,67 @@
     <h1 id="listagem-title">Listagem de Itens</h1>
     
     <div class="search-bar" id="listagem-search-bar">
-        <input type="text" id="search" placeholder="Buscar itens...">
+        <input type="text" id="search" placeholder="Buscar itens..." onkeyup="buscarItens()">
     </div>
     
     <table class="item-table" id="listagem-item-table">
         <thead>
             <tr>
-                <th>id_item</th>
+                <th>ID</th>
                 <th>Nome</th>
-                <th>descrição</th>
+                <th>Descrição</th>
                 <th>Preço</th>
                 <th>Disponibilidade</th>
                 <th>Ações</th>
             </tr>
         </thead>
-        <tbody>
-            {% for item in itens %}
-            <tr>
-                <th>{{ item.id_item }}</th>
-                <td>{{ item.nome_item }}</td>
-                <td>{{ item.descricao }}</td>
-                <td>R$ {{ item.preco }}</td>
-                <td>{{ 'Disponível' if item.disponivel else 'Indisponível' }}</td>
-                <td>
-                    <a href="{{ url_for('main.editar_item', id=item.id_item) }}" class="btn btn-edit">Editar</a>
-                    <form action="{{ url_for('main.excluir_item', id=item.id_item) }}" method="post" style="display:inline;">
-                        <!-- Adicione um campo oculto para o token CSRF -->
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                        <button type="submit" class="btn btn-delete" onclick="return confirm('Tem certeza que deseja excluir este item?');">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
+        <tbody id="itens-tbody">
+            <!-- O corpo da tabela será preenchido dinamicamente pelo JavaScript -->
         </tbody>
-        
     </table>
 </div>
+
+<script>
+    const editarUrlBase = "{{ url_for('main.editar_item', id=0) }}".replace('/0', '/');
+    const excluirUrlBase = "{{ url_for('main.excluir_item', id=0) }}".replace('/0', '/');
+
+    // Função para buscar os itens e atualizar a tabela
+    function buscarItens() {
+        var query = document.getElementById('search').value;
+
+        // Fazer a requisição para buscar os itens, com ou sem filtro
+        fetch(`/buscar_itens?q=${query}`)
+            .then(response => response.json())
+            .then(data => {
+                var tbody = document.getElementById('itens-tbody');
+                tbody.innerHTML = '';  // Limpar o conteúdo da tabela
+
+                data.forEach(function(item) {
+                    var row = `<tr>
+                        <th>${item.id_item}</th>
+                        <td>${item.nome_item}</td>
+                        <td>${item.descricao}</td>
+                        <td>R$ ${item.preco}</td>
+                        <td>${item.disponivel}</td>
+                        <td>
+                            <a href="${editarUrlBase + item.id_item}" class="btn btn-edit">Editar</a>
+                            <form action="${excluirUrlBase + item.id_item}" method="post" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-delete" onclick="return confirm('Tem certeza que deseja excluir este item?');">Excluir</button>
+                            </form>
+                        </td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Erro ao buscar itens:', error));
+    }
+
+    // Chamar a função de buscar itens ao carregar a página para exibir todos os itens inicialmente
+    document.addEventListener('DOMContentLoaded', function() {
+        buscarItens();
+    });
+</script>
+
+
 {% endblock %}
