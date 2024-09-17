@@ -10,6 +10,21 @@
 <h1 class="page-title">Anotar Pedido</h1>
 
 <div class="order-form">
+    <!-- Dados do Cliente/Mesa -->
+    <div class="customer-info">
+        <h2>Dados do Cliente/Mesa</h2>
+        <label for="customer-name">Nome do Cliente (opcional):</label>
+        <input type="text" id="customer-name" name="customer_name" placeholder="Digite o nome do cliente (opcional)">
+
+        <label for="table-number">Número da Mesa (opcional):</label>
+        <select id="table-number" name="table_number">
+            <option value="">Selecione uma mesa (opcional)</option>
+            {% for mesa in mesas %}
+                <option value="{{ mesa.numero_mesa }}">{{ mesa.numero_mesa }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
     <!-- Lista de Itens do Cardápio -->
     <div class="menu-list">
         <h2>Seleção de Itens</h2>
@@ -22,36 +37,21 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Exemplo de item do cardápio -->
+                {% for item in itens %}
                 <tr>
-                    <td>Hambúrguer</td>
-                    <td><input type="number" min="1" value="1"></td>
-                    <td><input type="checkbox"></td>
+                    <td>{{ item.nome_item }}</td>
+                    <td><input type="number" min="1" value="1" data-item-id="{{ item.id_item }}" class="item-quantity"></td>
+                    <td><input type="checkbox" data-item-id="{{ item.id_item }}" class="item-checkbox"></td>
                 </tr>
-                <tr>
-                    <td>Refrigerante</td>
-                    <td><input type="number" min="1" value="1"></td>
-                    <td><input type="checkbox"></td>
-                </tr>
-                <!-- Adicione mais itens conforme necessário -->
+                {% endfor %}
             </tbody>
         </table>
-    </div>
-
-    <!-- Dados do Cliente/Mesa -->
-    <div class="customer-info">
-        <h2>Dados do Cliente/Mesa</h2>
-        <label for="customer-name">Nome do Cliente:</label>
-        <input type="text" id="customer-name" placeholder="Digite o nome do cliente">
-        <label for="table-number">Número da Mesa:</label>
-        <input type="text" id="table-number" placeholder="Digite o número da mesa">
     </div>
 
     <!-- Resumo do Pedido -->
     <div class="order-summary">
         <h2>Resumo do Pedido</h2>
-        <div class="summary-content">
-            <!-- Itens selecionados e resumo do pedido aparecerão aqui -->
+        <div class="summary-content" id="order-summary-content">
             <p>Nenhum item selecionado.</p>
         </div>
     </div>
@@ -59,13 +59,15 @@
     <!-- Feedback do Cliente -->
     <div class="customer-feedback">
         <h2>Feedback do Cliente</h2>
-        <textarea id="feedback" placeholder="Insira uma nota ou feedback do cliente"></textarea>
+        <textarea id="feedback" name="feedback" placeholder="Insira uma nota ou feedback do cliente"></textarea>
     </div>
 
     <!-- Botões de Ação -->
     <div class="action-buttons">
-        <button class="btn-confirm">Confirmar Pedido</button>
-        <button class="btn-cancel">Cancelar Pedido</button>
+        <button class="btn-confirm" id="confirm-order">Confirmar Pedido</button>
+        <button class="btn-cancel" id="cancel-order">Cancelar Pedido</button>
     </div>
 </div>
+
+<script src="{{ url_for('static', filename='js/js.js') }}"></script>
 {% endblock %}

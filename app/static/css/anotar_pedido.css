@@ -1,3 +1,9 @@
+/* Define o comportamento de scroll para toda a página */
+html, body {
+    overflow: auto;
+    height: 100%;
+}
+
 /* Título da Página */
 .page-title {
     text-align: center;
@@ -14,8 +20,13 @@
 }
 
 /* Estilo da Lista de Itens do Cardápio */
+/* Estilo da Lista de Itens do Cardápio com Scroll */
 .menu-list {
     margin-bottom: 20px;
+    max-height: 300px; /* Limita a altura da lista */
+    overflow-y: auto; /* Adiciona scroll vertical quando necessário */
+    border: 1px solid #ddd; /* Adiciona borda para visualização clara */
+    padding: 10px; /* Espaçamento interno */
 }
 
 .menu-table {
@@ -68,9 +79,11 @@
     margin-bottom: 15px;
 }
 
-/* Estilo da Seção de Resumo do Pedido */
+/* Estilo da Seção de Resumo do Pedido com Scroll */
 .order-summary {
     margin-bottom: 20px;
+    max-height: 200px; /* Limita a altura da seção */
+    overflow-y: auto; /* Adiciona scroll vertical */
 }
 
 .summary-content {
@@ -80,14 +93,16 @@
     border: 1px solid #ddd;
 }
 
-/* Estilo da Seção de Feedback do Cliente */
+/* Estilo da Seção de Feedback do Cliente com Scroll */
 .customer-feedback textarea {
     width: calc(100% - 20px);
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    height: 80px;
-    resize: vertical;
+    height: 80px; /* Altura ajustável */
+    resize: vertical; /* Permite redimensionamento vertical */
+    max-height: 150px; /* Limita a altura máxima */
+    overflow-y: auto; /* Adiciona scroll vertical */
 }
 
 /* Estilo dos Botões de Ação */

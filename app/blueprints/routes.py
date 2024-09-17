@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app import db
-from app.models.models import ItemCardapio
+from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa
 from app.forms.addCardapio import ItemForm
 
 bp = Blueprint('main', __name__)
@@ -14,9 +14,60 @@ def home():
 def cardapio():
     return render_template('cardapio/cardapio.html', active_page='cardapio')
 
-@bp.route('/anotar_pedido')
+
+# Tela anotar pedido
+
+@bp.route('/anotar-pedido', methods=['GET', 'POST'])
 def anotar_pedido():
-    return render_template('anotar_pedido.html', active_page='anotar_pedido')
+    if request.method == 'POST':
+        data = request.json
+        
+        # Coletando os dados
+        customer_name = data.get('customer_name')
+        table_number = data.get('table_number')
+        feedback = data.get('feedback')
+        items = data.get('items')
+        
+        # Ajustando para valores nulos se o usuário não informar
+        customer_name = customer_name if customer_name else None
+        table_number = table_number if table_number else None
+
+        # Criar um novo pedido
+        pedido = Pedido(
+            nome_cliente=customer_name, 
+            numero_mesa=table_number, 
+            status='Pendente'
+        )
+        db.session.add(pedido)
+        db.session.commit()
+        
+        # Adicionar itens ao pedido
+        for item in items:
+            item_id = item['itemId']
+            quantity = item['quantity']
+            item_cardapio = ItemCardapio.query.get(item_id)
+            item_pedido = ItemPedido(
+                id_pedido=pedido.id_pedido, 
+                id_item=item_id, 
+                quantidade=quantity, 
+                preco_item=item_cardapio.preco
+            )
+            db.session.add(item_pedido)
+        
+        # Adicionar feedback se existir
+        if feedback:
+            feedback_record = Feedback(id_pedido=pedido.id_pedido, nota=feedback)
+            db.session.add(feedback_record)
+        
+        db.session.commit()
+        
+        return jsonify({'success': True})
+    
+    # GET request
+    mesas = Mesa.query.all()
+    itens = ItemCardapio.query.all()
+    return render_template('anotar_pedido.html', active_page='anotar_pedido', mesas=mesas, itens=itens)
+
 
 @bp.route('/acompanhar_pedidos')
 def acompanhar_pedidos():

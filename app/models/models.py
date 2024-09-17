@@ -22,29 +22,38 @@ class ItemCardapio(db.Model):
 # Modelo para a tabela pedidos
 class Pedido(db.Model):
     __tablename__ = 'pedidos'
-    id_pedido = Column(Integer, primary_key=True)
-    nome_cliente = Column(String(100), nullable=True)
-    numero_mesa = Column(Integer, ForeignKey('mesas.numero_mesa'))
-    status = Column(Enum('Pendente', 'Em Preparação', 'Concluído'), default='Pendente')
-    data_pedido = Column(DateTime, default=func.now())
+    id_pedido = db.Column(db.Integer, primary_key=True)
+    nome_cliente = db.Column(db.String(100), nullable=True)  # Nome do cliente pode ser NULL
+    numero_mesa = db.Column(db.Integer, db.ForeignKey('mesas.numero_mesa'), nullable=True)  # Chave estrangeira para a tabela de mesas
+    status = db.Column(db.String(50), nullable=False, default='Pendente')
+    data_pedido = db.Column(db.DateTime, default=db.func.now())
 
-    mesa = relationship('Mesa', back_populates='pedidos')
-    itens_pedido = relationship('ItemPedido', back_populates='pedido')
-    feedback = relationship('Feedback', uselist=False, back_populates='pedido')
+    # Relacionamento com a tabela 'Mesa'
+    mesa = db.relationship('Mesa', back_populates='pedidos')
+    
+    # Relacionamento com a tabela itens_pedido
+    itens_pedido = db.relationship('ItemPedido', back_populates='pedido')
+    
+    # Relacionamento com feedback (opcional), define que cada pedido pode ter um feedback
+    feedback = db.relationship('Feedback', uselist=False, back_populates='pedido')
 
     def __repr__(self):
         return f"<Pedido(id_pedido={self.id_pedido}, nome_cliente={self.nome_cliente}, status={self.status})>"
+
 
 # Modelo para a tabela itens_pedido
 class ItemPedido(db.Model):
     __tablename__ = 'itens_pedido'
     id_item_pedido = Column(Integer, primary_key=True)
-    id_pedido = Column(Integer, ForeignKey('pedidos.id_pedido'))
-    id_item = Column(Integer, ForeignKey('itens_cardapio.id_item'))
-    quantidade = Column(Integer, nullable=False)
-    preco_item = Column(db.Numeric(10, 2), nullable=False)
-
+    id_pedido = Column(Integer, ForeignKey('pedidos.id_pedido'), nullable=False)  # Referência para o pedido
+    id_item = Column(Integer, ForeignKey('itens_cardapio.id_item'), nullable=False)  # Referência para o item do cardápio
+    quantidade = Column(Integer, nullable=False)  # Quantidade do item no pedido
+    preco_item = Column(db.Numeric(10, 2), nullable=False)  # Preço do item no momento do pedido
+    
+    # Relacionamento com a tabela pedidos
     pedido = relationship('Pedido', back_populates='itens_pedido')
+    
+    # Relacionamento com a tabela itens_cardapio
     item = relationship('ItemCardapio')
 
     def __repr__(self):
@@ -53,10 +62,11 @@ class ItemPedido(db.Model):
 # Modelo para a tabela mesas
 class Mesa(db.Model):
     __tablename__ = 'mesas'
-    numero_mesa = Column(Integer, primary_key=True)
-    status_mesa = Column(String(50), nullable=False)
+    numero_mesa = db.Column(db.Integer, primary_key=True)
+    status_mesa = db.Column(db.String(50), nullable=False)
 
-    pedidos = relationship('Pedido', back_populates='mesa')
+    # Relacionamento com a tabela 'Pedido'
+    pedidos = db.relationship('Pedido', back_populates='mesa')
 
     def __repr__(self):
         return f"<Mesa(numero_mesa={self.numero_mesa}, status_mesa={self.status_mesa})>"
