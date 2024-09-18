@@ -1,4 +1,3 @@
-
 //Tela Anotar pedidos
 document.addEventListener('DOMContentLoaded', function() {
     const itemCheckboxes = document.querySelectorAll('.item-checkbox');
@@ -16,25 +15,39 @@ document.addEventListener('DOMContentLoaded', function() {
         quantityInput.addEventListener('input', updateSummary);
     });
 
+    function getItemPrice(itemId) {
+        return fetch(`/get-item-price/${itemId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Erro ao buscar o preço:', data.error);
+                    return 0;
+                }
+                return parseFloat(data.price); // Converte para float
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                return 0; // Retorna 0 caso haja erro
+            });
+    }
+
     function updateSummary() {
         selectedItems = [];
         summaryContent.innerHTML = '';
 
-        itemCheckboxes.forEach(checkbox => {
+        itemCheckboxes.forEach(async (checkbox) => {
             if (checkbox.checked) {
                 const itemId = checkbox.getAttribute('data-item-id');
                 const quantityInput = document.querySelector(`.item-quantity[data-item-id="${itemId}"]`);
                 const quantity = quantityInput.value;
-                
-                // Update selected items array
+
+                const itemPrice = await getItemPrice(itemId); // Aguarda o carregamento do preço
+                const totalPrice = (itemPrice * quantity).toFixed(2);
+
                 selectedItems.push({
                     itemId: itemId,
                     quantity: quantity
                 });
-
-                // Assume you have an item list with prices stored somewhere or fetched from the server
-                const itemPrice = getItemPrice(itemId); // Replace with actual price retrieval
-                const totalPrice = (itemPrice * quantity).toFixed(2);
 
                 summaryContent.innerHTML += `
                     <p>Item ID: ${itemId}, Quantidade: ${quantity}, Preço Total: R$${totalPrice}</p>
@@ -47,17 +60,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function getItemPrice(itemId) {
-        // Implement a function to retrieve the item price based on itemId
-        // This might be an AJAX call to fetch data from the server
-        return 10.00; // Placeholder value
-    }
-
     confirmButton.addEventListener('click', function() {
         const customerName = document.getElementById('customer-name').value || null;
         const tableNumber = document.getElementById('table-number').value || null;
         const feedback = document.getElementById('feedback').value;
-        
+    
         fetch('/anotar-pedido', {
             method: 'POST',
             headers: {
@@ -74,30 +81,52 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Pedido realizado com sucesso!');
+                showMessage('Pedido realizado com sucesso!', 'success');
+                clearForm(); // Limpa o formulário após o sucesso
             } else {
-                alert('Erro ao realizar o pedido.');
+                showMessage('Erro ao realizar o pedido: ' + data.message, 'error');
             }
+        })
+        .catch(error => {
+            console.error('Erro ao realizar o pedido:', error);
+            showMessage('Erro ao realizar o pedido. Por favor, tente novamente.', 'error');
         });
     });
-    
 
     cancelButton.addEventListener('click', function() {
-        // Clear selections and inputs
+        // Limpa seleções e inputs
         document.querySelectorAll('.item-checkbox').forEach(checkbox => checkbox.checked = false);
         document.querySelectorAll('.item-quantity').forEach(input => input.value = 1);
         summaryContent.innerHTML = '<p>Nenhum item selecionado.</p>';
     });
-    confirmButton.addEventListener('click', function() {
-        const customerName = document.getElementById('customer-name').value;
-        const tableNumber = document.getElementById('table-number').value;
-        const feedback = document.getElementById('feedback').value;
-        console.log({
-            customer_name: customerName,
-            table_number: tableNumber,
-            feedback: feedback,
-            items: selectedItems
+
+    // Função para limpar o formulário
+    function clearForm() {
+        document.getElementById('customer-name').value = '';
+        document.getElementById('table-number').value = '';
+        document.getElementById('feedback').value = '';
+        document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+            checkbox.checked = false;
         });
-    });
+        document.querySelectorAll('.item-quantity').forEach(input => {
+            input.value = 1;
+        });
+        summaryContent.innerHTML = '<p>Nenhum item selecionado.</p>';
+        selectedItems = [];
+    }
+
+
+    // Função para exibir mensagens de sucesso ou erro
+    function showMessage(message, type) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = message;
+        messageDiv.className = type;
+        messageDiv.style.display = 'block';
+    
+        // Oculta a mensagem após 5 segundos
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 5000);
+    }
     
 });

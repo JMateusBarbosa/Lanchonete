@@ -68,6 +68,14 @@ def anotar_pedido():
     itens = ItemCardapio.query.all()
     return render_template('anotar_pedido.html', active_page='anotar_pedido', mesas=mesas, itens=itens)
 
+# Rota para  retornar o preço dos itens
+@bp.route('/get-item-price/<int:item_id>', methods=['GET'])
+def get_item_price(item_id):
+    item = ItemCardapio.query.get(item_id)
+    if item:
+        return jsonify({'price': str(item.preco)})
+    return jsonify({'error': 'Item não encontrado'}), 404
+
 
 @bp.route('/acompanhar_pedidos')
 def acompanhar_pedidos():
