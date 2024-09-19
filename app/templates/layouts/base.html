@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{% block title %}Lanchonete{% endblock %}</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        {% block additional_css %}{% endblock %}
-    </head>
+    <title>{% block title %}Lanchonete{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% block additional_css %}{% endblock %}
+</head>
 <body>
     <!-- Banner Superior -->
     <header class="banner">
         <img src="{{ url_for('static', filename='img/banner.jpg') }}" alt="Logo da Lanchonete">
     </header>
 
-    <div class="container">
-        <!-- Quadrado Central -->
-        <div class="main-content">
+    <!-- Corpo Principal com Margens Laterais -->
+    <div class="main-container">
+        
+        <div class="inner-container">
             <!-- Menu Lateral -->
             <nav class="sidebar">
                 <ul>
@@ -40,17 +41,16 @@
                 </ul>
             </nav>
 
-
             <!-- Conteúdo Principal -->
-            <div class="content">
+            <main class="content">
                 {% block content %}{% endblock %}
-            </div>
-
-            <!-- Footer -->
-            <footer class="footer">
-                <p>&copy; 2024 Lanchonete. Todos os direitos reservados.</p>
-            </footer>
+            </main>
         </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Lanchonete. Todos os direitos reservados.</p>
+        </footer>
     </div>
 </body>
 </html>

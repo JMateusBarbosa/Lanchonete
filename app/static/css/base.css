@@ -1,45 +1,42 @@
-/* base.css */
-
+/* Definições gerais */
 body {
-    background-color: #FFD580; /* Laranja claro */
     margin: 0;
     font-family: 'Open Sans', sans-serif;
+    background-color: #FFD580; /* Cor de fundo da tela */
+    display: flex;
+    flex-direction: column;
+    min-height: 160vh;
 }
 
-/* Banner */
+/* Banner Superior */
 .banner {
-    width: 100%; /* Ocupa toda a largura da tela */
-    margin: 0 auto; /* Centraliza o banner horizontalmente */
-    padding: 10px 0;
-    margin-bottom: 40px; /* Ajusta o espaço entre o banner e o quadrado central */
+    width: 100%;
+    padding: 5px 0;
+    background-color: #FFD580;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 350px; /* Define a altura do banner */
-    
+    border-bottom: 2px solid #FFD580;
 }
 
 .banner img {
-    width: 100%; /* Ajusta a largura da imagem para ocupar todo o espaço do banner */
-    height: auto; /* Mantém a proporção da imagem */
-    max-width: 2200px; /* Define a largura máxima da imagem para evitar que ela fique muito grande em telas maiores */
-    object-fit: cover; /* Ajusta a imagem para preencher o espaço sem distorção */
+    width: 100%;
+    max-width: 2200px;
+    object-fit: cover;
+    height: 250px;
     border-radius: 8px;
 }
 
-
-
-/* Container */
-.container {
+/* Container Principal */
+.main-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     padding: 30px; /* Adiciona espaço ao redor da área do quadrado central */
     box-sizing: border-box;
 }
 
-/* Conteúdo Principal */
-.main-content {
+.inner-container {
     display: flex;
     flex: 1;
     background-color: #ffffff;
@@ -50,7 +47,6 @@ body {
     padding-right: 60px; /* Aumenta o espaço à direita */
 }
 
-
 /* Menu Lateral */
 .sidebar {
     width: 250px;
@@ -58,10 +54,8 @@ body {
     border-right: 2px solid #ddd;
     display: flex;
     flex-direction: column;
-    margin-left: 5px;
+    padding: 20px 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    border-radius: 8px 0 0 8px; /* Bordas arredondadas no lado esquerdo */
-    
 }
 
 .sidebar ul {
@@ -95,8 +89,6 @@ body {
     margin-right: 10px; 
 }
 
-
-
 .sidebar ul li:hover a::before {
     transform: scale(1.2);
 }
@@ -118,6 +110,7 @@ body {
     background-color: #f0f0f0; /* Cor de fundo quando o mouse passa sobre o item */
     cursor: pointer;
 }
+
 /* Conteúdo Principal */
 .content {
     padding: 20px;
@@ -131,9 +124,7 @@ body {
     text-align: center;
     padding: 10px;
     border-top: 2px solid #ddd;
-    position: absolute;
-    bottom: 0;
-    width: 100% ; /* Ocupa a largura restante do quadrado central */
+    width: 100%;
     box-sizing: border-box;
-    border-radius: 0 0 8px 8px; /* Bordas arredondadas na parte inferior */
+    border-radius: 0 0 8px 8px;
 }
