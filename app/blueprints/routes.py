@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from app import db
 from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa
 from app.forms.addCardapio import ItemForm
+from datetime import datetime, timedelta
 
 bp = Blueprint('main', __name__)
 
@@ -14,9 +15,7 @@ def home():
 def cardapio():
     return render_template('cardapio/cardapio.html', active_page='cardapio')
 
-
 # Tela anotar pedido
-
 @bp.route('/anotar-pedido', methods=['GET', 'POST'])
 def anotar_pedido():
     if request.method == 'POST':
@@ -76,10 +75,58 @@ def get_item_price(item_id):
         return jsonify({'price': str(item.preco)})
     return jsonify({'error': 'Item não encontrado'}), 404
 
-
-@bp.route('/acompanhar_pedidos')
+# Acompanhar pedidos com filtros e busca
+@bp.route('/acompanhar_pedidos', methods=['GET', 'POST'])
 def acompanhar_pedidos():
-    return render_template('acompanhar_pedidos.html', active_page='acompanhar_pedidos')
+    status = request.args.get('status', 'all')
+    time_filter = request.args.get('time', 'all')
+    search_query = request.args.get('search', '')
+
+    # Base query para todos os pedidos
+    pedidos_query = Pedido.query
+
+    # Filtro por status
+    if status == 'pending':
+        pedidos_query = pedidos_query.filter_by(status='Pendente')
+    elif status == 'completed':
+        pedidos_query = pedidos_query.filter_by(status='Concluído')
+
+    # Filtro de tempo (últimos 30 minutos, última hora, hoje)
+    if time_filter == '30m':
+        pedidos_query = pedidos_query.filter(Pedido.data_hora >= (datetime.utcnow() - timedelta(minutes=30)))
+    elif time_filter == '1h':
+        pedidos_query = pedidos_query.filter(Pedido.data_hora >= (datetime.utcnow() - timedelta(hours=1)))
+    elif time_filter == 'today':
+        pedidos_query = pedidos_query.filter(Pedido.data_hora >= datetime.utcnow().replace(hour=0, minute=0, second=0))
+
+    # Filtro de busca por mesa ou cliente
+    if search_query:
+        pedidos_query = pedidos_query.filter(Pedido.mesa_cliente.ilike(f'%{search_query}%'))
+
+    # Obter os pedidos filtrados
+    pedidos = pedidos_query.all()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verifica se a requisição é AJAX
+        return render_template('components/pedidos_table.html', pedidos=pedidos)
+
+    return render_template('acompanhar_pedidos.html', pedidos=pedidos , active_page='acompanhar_pedidos')
+
+#Atualizar status do pedido
+@bp.route('/atualizar_status_pedido', methods=['POST'])
+def atualizar_status_pedido():
+    pedido_id = request.form.get('pedido_id')
+    novo_status = request.form.get('status')
+
+    # Encontrar o pedido e atualizar o status
+    pedido = Pedido.query.get(pedido_id)
+    if pedido:
+        pedido.status = novo_status
+        db.session.commit()
+        return jsonify({'success': True, 'message': 'Status atualizado com sucesso.'})
+    
+    return jsonify({'success': False, 'message': 'Pedido não encontrado.'}), 404
+
+
 
 @bp.route('/relatorios_vendas')
 def relatorios_vendas():
