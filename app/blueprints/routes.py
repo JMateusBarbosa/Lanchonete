@@ -93,15 +93,20 @@ def acompanhar_pedidos():
 
     # Filtro de tempo (últimos 30 minutos, última hora, hoje)
     if time_filter == '30m':
-        pedidos_query = pedidos_query.filter(Pedido.data_hora >= (datetime.utcnow() - timedelta(minutes=30)))
+        pedidos_query = pedidos_query.filter(Pedido.data_pedido >= (datetime.utcnow() - timedelta(minutes=30)))
     elif time_filter == '1h':
-        pedidos_query = pedidos_query.filter(Pedido.data_hora >= (datetime.utcnow() - timedelta(hours=1)))
+        pedidos_query = pedidos_query.filter(Pedido.data_pedido >= (datetime.utcnow() - timedelta(hours=1)))
     elif time_filter == 'today':
-        pedidos_query = pedidos_query.filter(Pedido.data_hora >= datetime.utcnow().replace(hour=0, minute=0, second=0))
+        pedidos_query = pedidos_query.filter(Pedido.data_pedido >= datetime.utcnow().replace(hour=0, minute=0, second=0))
 
     # Filtro de busca por mesa ou cliente
     if search_query:
-        pedidos_query = pedidos_query.filter(Pedido.mesa_cliente.ilike(f'%{search_query}%'))
+        pedidos_query = pedidos_query.filter(
+            db.or_(
+                Pedido.nome_cliente.ilike(f'%{search_query}%'),
+                Pedido.numero_mesa.ilike(f'%{search_query}%')
+            )
+        )
 
     # Obter os pedidos filtrados
     pedidos = pedidos_query.all()
@@ -109,8 +114,7 @@ def acompanhar_pedidos():
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verifica se a requisição é AJAX
         return render_template('components/pedidos_table.html', pedidos=pedidos)
 
-    return render_template('acompanhar_pedidos.html', pedidos=pedidos , active_page='acompanhar_pedidos')
-
+    return render_template('acompanhar_pedidos.html', pedidos=pedidos, active_page='acompanhar_pedidos')
 #Atualizar status do pedido
 @bp.route('/atualizar_status_pedido', methods=['POST'])
 def atualizar_status_pedido():

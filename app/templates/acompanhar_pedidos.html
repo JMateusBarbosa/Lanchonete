@@ -43,7 +43,8 @@
             <tr>
                 <th>ID do Pedido</th>
                 <th>Hora</th>
-                <th>Mesa/Cliente</th>
+                <th>Nome do Cliente</th>
+                <th>Número da Mesa</th>
                 <th>Itens</th>
                 <th>Status</th>
                 <th>Ações</th>
@@ -51,13 +52,14 @@
         </thead>
         <tbody>
             {% for pedido in pedidos %}
-            <tr class="order-row" data-pedido-id="{{ pedido.id }}" data-status="{{ pedido.status }}">
-                <td>{{ pedido.id }}</td>
+            <tr class="order-row" data-pedido-id="{{ pedido.id_pedido }}" data-status="{{ pedido.status }}">
+                <td>{{ pedido.id_pedido }}</td>
                 <td>{{ pedido.data_pedido.strftime('%H:%M') }}</td>
-                <td>{{ pedido.mesa_cliente }}</td>
+                <td>{% if pedido.nome_cliente %}{{ pedido.nome_cliente }}{% else %}—{% endif %}</td>
+                <td>{% if pedido.numero_mesa %}{{ pedido.numero_mesa }}{% else %}—{% endif %}</td>
                 <td>
-                    {% for item in pedido.itens %}
-                        {{ item.quantidade }}x {{ item.nome }}
+                    {% for item in pedido.itens_pedido %}
+                        {{ item.quantidade }}x {{ item.item.nome }}<br>
                     {% endfor %}
                 </td>
                 <td class="status-cell">
