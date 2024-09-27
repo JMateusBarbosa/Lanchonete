@@ -113,23 +113,12 @@
     background-color: #f1f1f1;
 }
 
-/* Status de Pedidos */
-.status.pending {
-    color: #FF0000; /* Vermelho */
-    font-weight: bold;
-}
-
-.status.completed {
-    color: #28a745; /* Verde */
-    font-weight: bold;
-}
-
-.actions-cell button {
+.btn-complete {
     padding: 8px 12px;
-    background-color: #007bff;
+    background-color: #e89c38;
     color: #fff;
     border: none;
-    border-radius: 25px;
+    border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
@@ -140,58 +129,30 @@
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Notificações */
-#notifications {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #333;
-    color: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    display: none;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
 
-#notifications.show {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
+.orders-table-container {
+    overflow-x: auto;
 }
-
-#notifications.hide {
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-/* Botão Concluir */
-.btn-concluir {
-    background-color: #28a745; /* Verde */
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 25px;
+.notification {
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
     font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.btn-concluir:hover {
-    background-color: #218838; /* Verde mais escuro ao passar o mouse */
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+.notification.success {
+    background-color: #4CAF50;
+    color: white;
 }
 
-.btn-concluir:active {
-    background-color: #1e7e34; /* Verde ainda mais escuro ao clicar */
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+.notification.error {
+    background-color: #f44336;
+    color: white;
 }
 
-.btn-concluir:disabled {
-    background-color: #6c757d; /* Cinza */
-    cursor: not-allowed;
-    box-shadow: none;
-}
+
+
 
 

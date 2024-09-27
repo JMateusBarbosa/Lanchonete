@@ -1,55 +1,43 @@
-document.getElementById('filter-status').addEventListener('change', updateOrders);
-document.getElementById('filter-time').addEventListener('change', updateOrders);
-document.getElementById('search').addEventListener('input', updateOrders);
-
-function updateOrders() {
-    const status = document.getElementById('filter-status').value;
-    const time = document.getElementById('filter-time').value;
-    const search = document.getElementById('search').value;
-
-    const url = `/acompanhar_pedidos?status=${status}&time=${time}&search=${search}`;
-
-    fetch(url)
-        .then(response => response.text())
-        .then(html => {
-            document.querySelector('.orders-table tbody').innerHTML = html;
-            assignStatusToggleEvents();  // Reatribuir eventos aos botões
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar pedidos:', error);
-        });
-}
-
-function assignStatusToggleEvents() {
-    document.querySelectorAll('.status-toggle').forEach(button => {
+document.addEventListener('DOMContentLoaded', function() {
+    const completeButtons = document.querySelectorAll('.btn-complete');
+    
+    completeButtons.forEach(button => {
         button.addEventListener('click', function() {
-            const pedidoId = this.closest('.order-row').dataset.pedidoId;
-            const novoStatus = this.dataset.novoStatus;
-
-            fetch('/atualizar_status_pedido', {
+            const pedidoId = this.getAttribute('data-pedido-id');
+            const statusCell = this.closest('tr').querySelector('.status-cell');
+            
+            fetch(`/concluir-pedido/${pedidoId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: `pedido_id=${pedidoId}&status=${novoStatus}`,
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Status atualizado com sucesso.');
-                    updateOrders();
+                    statusCell.textContent = 'Concluído';  // Atualiza o status na tabela
+                    showMessage('Pedido concluído com sucesso!', 'success');
                 } else {
-                    alert('Erro ao atualizar status: ' + data.message);
+                    showMessage('Erro ao concluir o pedido: ' + data.message, 'error');
                 }
             })
             .catch(error => {
-                console.error('Erro ao atualizar status:', error);
+                console.error('Erro ao concluir o pedido:', error);
+                showMessage('Erro ao concluir o pedido. Por favor, tente novamente.', 'error');
             });
         });
     });
-}
 
-// Chamada inicial para atribuir os eventos
-assignStatusToggleEvents();
-
-setInterval(updateOrders, 10000);
+    // Função para exibir mensagens de sucesso ou erro
+    function showMessage(message, type) {
+        const messageDiv = document.getElementById('notifications');
+        messageDiv.textContent = message;
+        messageDiv.className = `notification ${type}`;
+        messageDiv.style.display = 'block';
+    
+        // Oculta a mensagem após 5 segundos
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 5000);
+    }
+});

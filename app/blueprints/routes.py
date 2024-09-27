@@ -3,6 +3,8 @@ from app import db
 from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa
 from app.forms.addCardapio import ItemForm
 from datetime import datetime, timedelta
+from sqlalchemy import text
+
 
 bp = Blueprint('main', __name__)
 
@@ -115,22 +117,20 @@ def acompanhar_pedidos():
         return render_template('components/pedidos_table.html', pedidos=pedidos)
 
     return render_template('acompanhar_pedidos.html', pedidos=pedidos, active_page='acompanhar_pedidos')
-#Atualizar status do pedido
-@bp.route('/atualizar_status_pedido', methods=['POST'])
-def atualizar_status_pedido():
-    pedido_id = request.form.get('pedido_id')
-    novo_status = request.form.get('status')
 
-    # Encontrar o pedido e atualizar o status
-    pedido = Pedido.query.get(pedido_id)
-    if pedido:
-        pedido.status = novo_status
-        db.session.commit()
-        return jsonify({'success': True, 'message': 'Status atualizado com sucesso.'})
-    
-    return jsonify({'success': False, 'message': 'Pedido não encontrado.'}), 404
-
-
+# Atualizar status do pedido
+@bp.route('/concluir-pedido/<int:pedido_id>', methods=['POST'])
+def concluir_pedido(pedido_id):
+    try:
+        pedido = Pedido.query.get(pedido_id)
+        if pedido:
+            pedido.status = 'Concluído'
+            db.session.commit()
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'message': 'Pedido não encontrado.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
 
 @bp.route('/relatorios_vendas')
 def relatorios_vendas():
