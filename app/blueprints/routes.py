@@ -79,6 +79,7 @@ def get_item_price(item_id):
 
 # Acompanhar pedidos com filtros e busca
 @bp.route('/acompanhar_pedidos', methods=['GET', 'POST'])
+@bp.route('/acompanhar_pedidos', methods=['GET', 'POST'])
 def acompanhar_pedidos():
     status = request.args.get('status', 'all')
     time_filter = request.args.get('time', 'all')
@@ -115,8 +116,6 @@ def acompanhar_pedidos():
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verifica se a requisição é AJAX
        return render_template('components/table_rows.html', pedidos=pedidos)
-
-
 
     return render_template('acompanhar_pedidos.html', pedidos=pedidos, active_page='acompanhar_pedidos')
 

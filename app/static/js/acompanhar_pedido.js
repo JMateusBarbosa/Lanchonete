@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const filterStatus = document.getElementById('filter-status');
+    const searchInput = document.getElementById('search');
+
 
     // Delegação de eventos para os botões 'Concluir Pedido'
     document.querySelector('.orders-table tbody').addEventListener('click', function(event) {
@@ -33,6 +35,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 showMessage('Erro ao concluir o pedido. Por favor, tente novamente.', 'error');
             });
         }
+    });
+    
+   // Evento para buscar pedidos ao digitar
+   searchInput.addEventListener('input', function() {
+        const searchQuery = searchInput.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('search', searchQuery);  // Atualiza o parâmetro de busca na URL
+
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Atualiza apenas as linhas da tabela
+            document.querySelector('.orders-table tbody').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Erro ao buscar os pedidos:', error);
+        });
     });
 
     // Adicionar evento para o filtro de status
