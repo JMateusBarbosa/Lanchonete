@@ -68,15 +68,8 @@
                     {{ item_pedido.quantidade }}<br>
                 {% endfor %}
             </td>
-
-            <!-- Exibir o status atual -->
-            <td class="status-cell">
-                {{ pedido.status }} <!-- Mostrar o status atual do pedido -->
-            </td>
-
-            <!-- Botão para alterar status -->
+            <td class="status-cell">{{ pedido.status }}</td>
             <td>
-                <!-- Botão de conclusão de pedido -->
                 <button class="btn-complete" data-pedido-id="{{ pedido.id_pedido }}">Concluir Pedido</button>
             </td>
         </tr>

@@ -114,7 +114,9 @@ def acompanhar_pedidos():
     pedidos = pedidos_query.all()
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verifica se a requisição é AJAX
-        return render_template('components/pedidos_table.html', pedidos=pedidos)
+       return render_template('components/table_rows.html', pedidos=pedidos)
+
+
 
     return render_template('acompanhar_pedidos.html', pedidos=pedidos, active_page='acompanhar_pedidos')
 
