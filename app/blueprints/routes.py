@@ -5,8 +5,13 @@ from app.forms.addCardapio import ItemForm
 from datetime import datetime, timedelta
 from sqlalchemy import text
 from app import csrf
+from datetime import datetime
+import locale
 
 bp = Blueprint('main', __name__)
+
+# Defina a localidade para formatação em Real (R$)
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 @bp.route('/')
 @bp.route('/home')
@@ -155,8 +160,8 @@ def relatorios_vendas():
             relatorios = db.session.execute(text("""
                 SELECT 
                     COUNT(p.id_pedido) AS total_pedidos,
-                    SUM(p.total_pedido) AS total_vendas,
-                    AVG(p.total_pedido) AS media_por_venda,
+                    SUM(COALESCE(p.total_pedido, 0)) AS total_vendas,
+                    AVG(COALESCE(p.total_pedido, 0)) AS media_por_venda,
                     (SELECT i.nome_item FROM itens_cardapio i 
                     JOIN itens_pedido ip ON i.id_item = ip.id_item 
                     GROUP BY ip.id_item 
@@ -165,9 +170,8 @@ def relatorios_vendas():
                 FROM 
                     pedidos p
                 WHERE 
-                    p.data_pedido BETWEEN :data_inicio AND :data_fim
+                    p.data_pedido BETWEEN :data_inicio AND :data_fim + INTERVAL 1 DAY
             """), {'data_inicio': data_inicio, 'data_fim': data_fim})
-
 
             relatorio = relatorios.fetchone()
 
@@ -177,6 +181,10 @@ def relatorios_vendas():
                 total_pedidos = relatorio.total_pedidos or 0
                 media_por_venda = relatorio.media_por_venda or 0
                 produto_mais_vendido = relatorio.produto_mais_vendido or "N/A"
+
+                # Formatar os valores para o padrão monetário
+                total_vendas = locale.currency(total_vendas, grouping=True)
+                media_por_venda = locale.currency(media_por_venda, grouping=True)
 
     return render_template('relatorios_vendas.html', 
                            total_vendas=total_vendas, 
