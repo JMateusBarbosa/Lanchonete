@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const itemQuantities = document.querySelectorAll('.item-quantity');
     const summaryContent = document.getElementById('order-summary-content');
     const confirmButton = document.getElementById('confirm-order');
-    const cancelButton = document.getElementById('cancel-order');
     let selectedItems = [];
+    let totalPedido = 0.0; // Variável para armazenar o total do pedido
 
     itemCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateSummary);
@@ -31,18 +31,21 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    function updateSummary() {
+    async function updateSummary() {
         selectedItems = [];
+        totalPedido = 0.0; // Resetar o total antes de recalcular
         summaryContent.innerHTML = '';
 
-        itemCheckboxes.forEach(async (checkbox) => {
+        for (let checkbox of itemCheckboxes) {
             if (checkbox.checked) {
                 const itemId = checkbox.getAttribute('data-item-id');
                 const quantityInput = document.querySelector(`.item-quantity[data-item-id="${itemId}"]`);
                 const quantity = quantityInput.value;
 
-                const itemPrice = await getItemPrice(itemId); // Aguarda o carregamento do preço
+                const itemPrice = await getItemPrice(itemId);
                 const totalPrice = (itemPrice * quantity).toFixed(2);
+
+                totalPedido += parseFloat(totalPrice); // Adiciona ao total
 
                 selectedItems.push({
                     itemId: itemId,
@@ -53,10 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>Item ID: ${itemId}, Quantidade: ${quantity}, Preço Total: R$${totalPrice}</p>
                 `;
             }
-        });
+        }
 
         if (selectedItems.length === 0) {
             summaryContent.innerHTML = '<p>Nenhum item selecionado.</p>';
+        } else {
+            summaryContent.innerHTML += `<p><strong>Total do Pedido: R$${totalPedido.toFixed(2)}</strong></p>`;
         }
     }
 
@@ -75,14 +80,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 customer_name: customerName,
                 table_number: tableNumber,
                 feedback: feedback,
-                items: selectedItems
+                items: selectedItems,
+                total_pedido: totalPedido // Inclui o total do pedido na requisição
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 showMessage('Pedido realizado com sucesso!', 'success');
-                clearForm(); // Limpa o formulário após o sucesso
+                clearForm();
             } else {
                 showMessage('Erro ao realizar o pedido: ' + data.message, 'error');
             }
@@ -92,6 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
             showMessage('Erro ao realizar o pedido. Por favor, tente novamente.', 'error');
         });
     });
+
+
 
     cancelButton.addEventListener('click', function() {
         // Limpa seleções e inputs

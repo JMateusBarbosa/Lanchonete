@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from app import db
-from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa
+from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa, RelatorioVendas
 from app.forms.addCardapio import ItemForm
 from datetime import datetime, timedelta
 from sqlalchemy import text
-
+from app import csrf
 
 bp = Blueprint('main', __name__)
 
@@ -28,16 +28,18 @@ def anotar_pedido():
         table_number = data.get('table_number')
         feedback = data.get('feedback')
         items = data.get('items')
-        
+        total_pedido = data.get('total_pedido', 0.0)  # Coleta o total do pedido, ou 0.0 como padrão
+
         # Ajustando para valores nulos se o usuário não informar
         customer_name = customer_name if customer_name else None
         table_number = table_number if table_number else None
 
-        # Criar um novo pedido
+        # Criar um novo pedido com total_pedido
         pedido = Pedido(
             nome_cliente=customer_name, 
             numero_mesa=table_number, 
-            status='Pendente'
+            status='Pendente',
+            total_pedido=total_pedido  # Inclui o total_pedido no pedido
         )
         db.session.add(pedido)
         db.session.commit()
@@ -78,7 +80,6 @@ def get_item_price(item_id):
     return jsonify({'error': 'Item não encontrado'}), 404
 
 # Acompanhar pedidos com filtros e busca
-@bp.route('/acompanhar_pedidos', methods=['GET', 'POST'])
 @bp.route('/acompanhar_pedidos', methods=['GET', 'POST'])
 def acompanhar_pedidos():
     status = request.args.get('status', 'all')
@@ -133,9 +134,57 @@ def concluir_pedido(pedido_id):
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
-@bp.route('/relatorios_vendas')
+# Tela relatorio de vendas
+@bp.route('/relatorios_vendas', methods=['GET', 'POST'])
 def relatorios_vendas():
-    return render_template('relatorios_vendas.html', active_page='relatorios_vendas')
+    total_vendas = 0
+    total_pedidos = 0
+    media_por_venda = 0
+    produto_mais_vendido = "N/A"
+    
+    if request.method == 'POST':
+        data_inicio = request.form.get('data-inicio')
+        data_fim = request.form.get('data-fim')
+
+        if data_inicio and data_fim:
+            # Conversão de string para datetime
+            data_inicio = datetime.strptime(data_inicio, '%Y-%m-%d')
+            data_fim = datetime.strptime(data_fim, '%Y-%m-%d')
+
+            # Executando a query dinâmica para gerar o relatório
+            relatorios = db.session.execute(text("""
+                SELECT 
+                    COUNT(p.id_pedido) AS total_pedidos,
+                    SUM(p.total_pedido) AS total_vendas,
+                    AVG(p.total_pedido) AS media_por_venda,
+                    (SELECT i.nome_item FROM itens_cardapio i 
+                    JOIN itens_pedido ip ON i.id_item = ip.id_item 
+                    GROUP BY ip.id_item 
+                    ORDER BY COUNT(ip.quantidade) DESC 
+                    LIMIT 1) AS produto_mais_vendido
+                FROM 
+                    pedidos p
+                WHERE 
+                    p.data_pedido BETWEEN :data_inicio AND :data_fim
+            """), {'data_inicio': data_inicio, 'data_fim': data_fim})
+
+
+            relatorio = relatorios.fetchone()
+
+            # Verificar se a consulta retornou dados
+            if relatorio:
+                total_vendas = relatorio.total_vendas or 0
+                total_pedidos = relatorio.total_pedidos or 0
+                media_por_venda = relatorio.media_por_venda or 0
+                produto_mais_vendido = relatorio.produto_mais_vendido or "N/A"
+
+    return render_template('relatorios_vendas.html', 
+                           total_vendas=total_vendas, 
+                           total_pedidos=total_pedidos, 
+                           media_por_venda=media_por_venda, 
+                           produto_mais_vendido=produto_mais_vendido)
+
+
 
 #Telas do cardapio
 

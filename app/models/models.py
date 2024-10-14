@@ -25,6 +25,7 @@ class Pedido(db.Model):
     numero_mesa = db.Column(db.Integer, db.ForeignKey('mesas.numero_mesa'), nullable=True)  # Chave estrangeira para a tabela de mesas
     status = db.Column(db.String(50), nullable=False, default='Pendente')
     data_pedido = db.Column(db.DateTime, default=db.func.now())
+    total_pedido = db.Column(db.Float, nullable=False, default=0.0)  # Coluna total do pedido, iniciando com valor 0.0
 
     # Relacionamento com a tabela 'Mesa'
     mesa = db.relationship('Mesa', back_populates='pedidos')
@@ -36,7 +37,7 @@ class Pedido(db.Model):
     feedback = db.relationship('Feedback', uselist=False, back_populates='pedido')
 
     def __repr__(self):
-        return f"<Pedido(id_pedido={self.id_pedido}, nome_cliente={self.nome_cliente}, status={self.status})>"
+        return f"<Pedido(id_pedido={self.id_pedido}, nome_cliente={self.nome_cliente}, status={self.status}, total_pedido={self.total_pedido})>"
 
 
 # Modelo para a tabela itens_pedido
@@ -81,16 +82,18 @@ class Feedback(db.Model):
     def __repr__(self):
         return f"<Feedback(id_feedback={self.id_feedback}, id_pedido={self.id_pedido})>"
 
-# Modelo para a tabela relatorios_vendas
+## Modelo atualizado para a tabela relatorios_vendas
 class RelatorioVendas(db.Model):
     __tablename__ = 'relatorios_vendas'
+    
     id_relatorio = Column(Integer, primary_key=True)
     data_inicio = Column(DateTime, nullable=False)
     data_fim = Column(DateTime, nullable=False)
-    total_vendas = Column(db.Numeric(10, 2), nullable=True)
+    total_vendas = Column(db.Numeric(10, 2), nullable=False)
+    total_pedidos = Column(Integer, nullable=False)
 
     def __repr__(self):
-        return f"<RelatorioVendas(id_relatorio={self.id_relatorio}, data_inicio={self.data_inicio}, data_fim={self.data_fim})>"
+        return f"<RelatorioVendas(id_relatorio={self.id_relatorio}, data_inicio={self.data_inicio}, data_fim={self.data_fim}, total_vendas={self.total_vendas}, total_pedidos={self.total_pedidos})>"
 
 class Item(db.Model):
     id_item = db.Column(db.Integer, primary_key=True)
