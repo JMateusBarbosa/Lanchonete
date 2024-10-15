@@ -171,6 +171,7 @@ def relatorios_vendas():
                     pedidos p
                 WHERE 
                     p.data_pedido BETWEEN :data_inicio AND :data_fim + INTERVAL 1 DAY
+                    AND p.status = 'Concluído'
             """), {'data_inicio': data_inicio, 'data_fim': data_fim})
 
             relatorio = relatorios.fetchone()
