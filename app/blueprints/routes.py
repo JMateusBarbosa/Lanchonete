@@ -191,7 +191,8 @@ def relatorios_vendas():
                            total_vendas=total_vendas, 
                            total_pedidos=total_pedidos, 
                            media_por_venda=media_por_venda, 
-                           produto_mais_vendido=produto_mais_vendido)
+                           produto_mais_vendido=produto_mais_vendido,
+                           active_page='cardapio')
 
 
 

@@ -22,20 +22,9 @@
             <option value="pending">Pendentes</option>
             <option value="completed">Concluídos</option>
         </select>
-        <select id="filter-time">
-            <option value="all">Todos os tempos</option>
-            <option value="30m">Últimos 30 minutos</option>
-            <option value="1h">Última hora</option>
-            <option value="today">Hoje</option>
-        </select>
+        
     </div>
-    <div class="update-controls">
-        <button id="refresh-button">Atualizar</button>
-        <div class="auto-refresh">
-            <input type="checkbox" id="auto-refresh" checked>
-            <label for="auto-refresh">Atualização automática</label>
-        </div>
-    </div>
+    
 </div>
 <div id="notifications" style="display: none;" class="notification"></div> <!-- Adiciona este elemento logo após o h1 -->
 
@@ -56,6 +45,12 @@
         {% include 'components/table_rows.html' %}
     </tbody>
 </table>
+
+
+</div>
+
+
+
 
 
 

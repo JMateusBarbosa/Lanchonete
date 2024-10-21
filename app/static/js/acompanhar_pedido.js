@@ -1,6 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const filterStatus = document.getElementById('filter-status');
     const searchInput = document.getElementById('search');
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const currentPageLabel = document.getElementById('current-page');
+    let currentPage = 1;
+    const itemsPerPage = 10;  // Definir o número de itens por página
 
 
     // Delegação de eventos para os botões 'Concluir Pedido'
@@ -79,6 +84,54 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Função para carregar a página de pedidos
+    function loadPage(page) {
+        const searchQuery = searchInput.value;
+        const status = filterStatus.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', page);
+        url.searchParams.set('items_per_page', itemsPerPage);
+        if (searchQuery) {
+            url.searchParams.set('search', searchQuery);
+        }
+        if (status !== 'all') {
+            url.searchParams.set('status', status);
+        }
+
+        fetch(url.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.querySelector('.orders-table tbody').innerHTML = data;
+
+            // Atualizar controle de página
+            currentPage = page;
+            currentPageLabel.textContent = `Página ${currentPage}`;
+
+            // Desabilitar/ativar botões de acordo com a página
+            prevPageBtn.disabled = (currentPage === 1);
+            // Lógica para desativar o próximo botão quando não houver mais pedidos
+            nextPageBtn.disabled = data.trim() === "";  // Simplesmente desativa se não há dados
+        })
+        .catch(error => {
+            console.error('Erro ao carregar pedidos:', error);
+        });
+    }
+
+    // Eventos de paginação
+    prevPageBtn.addEventListener('click', function() {
+        if (currentPage > 1) {
+            loadPage(currentPage - 1);
+        }
+    });
+
+    nextPageBtn.addEventListener('click', function() {
+        loadPage(currentPage + 1);
+    });
+
     // Função para exibir mensagens de sucesso ou erro
     function showMessage(message, type) {
         const messageDiv = document.getElementById('notifications');
@@ -91,4 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
             messageDiv.style.display = 'none';
         }, 5000);
     }
+    // Carregar a primeira página quando a página carregar
+    loadPage(currentPage);
 });
