@@ -3,7 +3,7 @@ from app import db
 from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa, RelatorioVendas
 from app.forms.addCardapio import ItemForm
 from datetime import datetime, timedelta
-from sqlalchemy import text
+from sqlalchemy import text, or_
 from app import csrf
 from datetime import datetime
 import locale
@@ -84,6 +84,7 @@ def get_item_price(item_id):
         return jsonify({'price': str(item.preco)})
     return jsonify({'error': 'Item não encontrado'}), 404
 
+
 # Acompanhar pedidos com filtros e busca
 @bp.route('/acompanhar_pedidos', methods=['GET', 'POST'])
 def acompanhar_pedidos():
@@ -124,6 +125,7 @@ def acompanhar_pedidos():
        return render_template('components/table_rows.html', pedidos=pedidos)
 
     return render_template('acompanhar_pedidos.html', pedidos=pedidos, active_page='acompanhar_pedidos')
+
 
 # Atualizar status do pedido
 @bp.route('/concluir-pedido/<int:pedido_id>', methods=['POST'])
