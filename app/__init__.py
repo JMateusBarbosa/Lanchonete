@@ -12,12 +12,12 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object('config.Config')
     
-    # Inicialize as extensões
+    # Inicialize extensões sem SQLAlchemy
     Bootstrap(app)
-    db.init_app(app)  # Inicializa o banco de dados
-    csrf.init_app(app)  # Inicializa a proteção CSRF
-    migrate.init_app(app, db)  # Inicialize o Flask-Migrate com o app e db
-
+    csrf.init_app(app)
+    if app.config['SQLALCHEMY_DATABASE_URI']:  # Ignora o banco se URI estiver vazia
+        db.init_app(app)
+        migrate.init_app(app, db)
     # Registre as rotas
     from app.blueprints import routes
     app.register_blueprint(routes.bp)
