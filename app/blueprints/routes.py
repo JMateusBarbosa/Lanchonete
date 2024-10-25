@@ -11,7 +11,7 @@ import locale
 bp = Blueprint('main', __name__)
 
 # Defina a localidade para formatação em Real (R$)
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 @bp.route('/')
 @bp.route('/home')
@@ -139,6 +139,11 @@ def concluir_pedido(pedido_id):
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
+#Converção moeda
+def format_currency(value):
+    return f"R$ {value:,.2f}".replace('.', ',')
+
+
 # Tela relatorio de vendas
 @bp.route('/relatorios_vendas', methods=['GET', 'POST'])
 def relatorios_vendas():
@@ -184,8 +189,9 @@ def relatorios_vendas():
                 produto_mais_vendido = relatorio.produto_mais_vendido or "N/A"
 
                 # Formatar os valores para o padrão monetário
-                total_vendas = locale.currency(total_vendas, grouping=True)
-                media_por_venda = locale.currency(media_por_venda, grouping=True)
+                total_vendas = format_currency(total_vendas)
+                media_por_venda = format_currency(media_por_venda)
+
 
     return render_template('relatorios_vendas.html', 
                            total_vendas=total_vendas, 
