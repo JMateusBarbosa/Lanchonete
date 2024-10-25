@@ -117,14 +117,18 @@ def acompanhar_pedidos():
             )
         )
 
-    # Obter os pedidos filtrados
-    pedidos = pedidos_query.all()
+    try:
+        # Obter os pedidos filtrados
+        pedidos = pedidos_query.all()
+    except Exception as e:
+        print(f"Erro ao acessar o banco de dados: {e}")  # Log de erro
+        pedidos = []  # Caso de erro, inicializa como lista vazia
 
+    # Resposta AJAX
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # Verifica se a requisição é AJAX
        return render_template('components/table_rows.html', pedidos=pedidos)
 
     return render_template('acompanhar_pedidos.html', pedidos=pedidos, active_page='acompanhar_pedidos')
-
 # Atualizar status do pedido
 @bp.route('/concluir-pedido/<int:pedido_id>', methods=['POST'])
 def concluir_pedido(pedido_id):
@@ -198,7 +202,7 @@ def relatorios_vendas():
                            total_pedidos=total_pedidos, 
                            media_por_venda=media_por_venda, 
                            produto_mais_vendido=produto_mais_vendido,
-                           active_page='cardapio')
+                           active_page='relatorios_vendas')
 
 
 

@@ -1,22 +1,27 @@
-{% for pedido in pedidos %}
-<tr class="order-row" data-pedido-id="{{ pedido.id_pedido }}" data-status="{{ pedido.status }}">
-    <td>{{ pedido.data_pedido.strftime('%H:%M') }}</td>
-    <td>{{ pedido.nome_cliente }}</td>
-    <td>{{ pedido.numero_mesa if pedido.numero_mesa else '—' }}</td>
-    <td>
-        {% for item_pedido in pedido.itens_pedido %}
-            {{ item_pedido.item.nome_item }}<br>
-        {% endfor %}
-    </td>
-    <td>
-        {% for item_pedido in pedido.itens_pedido %}
-            {{ item_pedido.quantidade }}<br>
-        {% endfor %}
-    </td>
-    <td class="status-cell">{{ pedido.status }}</td>
-    <td>
-        <button class="btn-complete" data-pedido-id="{{ pedido.id_pedido }}">Concluir Pedido</button>
-    </td>
-</tr>
-
-{% endfor %}
+{% if pedidos %}
+    {% for pedido in pedidos %}
+    <tr class="order-row" data-pedido-id="{{ pedido.id_pedido }}" data-status="{{ pedido.status }}">
+        <td>{{ pedido.data_pedido.strftime('%H:%M') }}</td>
+        <td>{{ pedido.nome_cliente }}</td>
+        <td>{{ pedido.numero_mesa if pedido.numero_mesa else '—' }}</td>
+        <td>
+            {% for item_pedido in pedido.itens_pedido %}
+                {{ item_pedido.item.nome_item }}<br>
+            {% endfor %}
+        </td>
+        <td>
+            {% for item_pedido in pedido.itens_pedido %}
+                {{ item_pedido.quantidade }}<br>
+            {% endfor %}
+        </td>
+        <td class="status-cell">{{ pedido.status }}</td>
+        <td>
+            <button class="btn-complete" data-pedido-id="{{ pedido.id_pedido }}">Concluir Pedido</button>
+        </td>
+    </tr>
+    {% endfor %}
+{% else %}
+    <tr>
+        <td colspan="7">Nenhum pedido encontrado.</td>
+    </tr>
+{% endif %}
