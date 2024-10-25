@@ -99,8 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-
-
     cancelButton.addEventListener('click', function() {
         // Limpa seleções e inputs
         document.querySelectorAll('.item-checkbox').forEach(checkbox => checkbox.checked = false);

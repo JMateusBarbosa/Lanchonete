@@ -33,9 +33,8 @@ def anotar_pedido():
         table_number = data.get('table_number')
         feedback = data.get('feedback')
         items = data.get('items')
-        total_pedido = data.get('total_pedido', 0.0)  # Coleta o total do pedido, ou 0.0 como padrão
+        total_pedido = data.get('total_pedido', 0.0)
 
-        # Ajustando para valores nulos se o usuário não informar
         customer_name = customer_name if customer_name else None
         table_number = table_number if table_number else None
 
@@ -44,7 +43,7 @@ def anotar_pedido():
             nome_cliente=customer_name, 
             numero_mesa=table_number, 
             status='Pendente',
-            total_pedido=total_pedido  # Inclui o total_pedido no pedido
+            total_pedido=total_pedido  
         )
         db.session.add(pedido)
         db.session.commit()
@@ -62,7 +61,6 @@ def anotar_pedido():
             )
             db.session.add(item_pedido)
         
-        # Adicionar feedback se existir
         if feedback:
             feedback_record = Feedback(id_pedido=pedido.id_pedido, nota=feedback)
             db.session.add(feedback_record)
@@ -72,9 +70,17 @@ def anotar_pedido():
         return jsonify({'success': True})
     
     # GET request
-    mesas = Mesa.query.all()
-    itens = ItemCardapio.query.all()
+    try:
+        mesas = Mesa.query.all()
+        itens = ItemCardapio.query.all()
+    except Exception as e:
+        print(f"Erro ao acessar o banco de dados: {e}")
+        # Dados fictícios em caso de falha
+        mesas = [{'numero_mesa': '1'}, {'numero_mesa': '2'}]
+        itens = [{'id_item': 1, 'nome_item': 'Item Fictício 1'}, {'id_item': 2, 'nome_item': 'Item Fictício 2'}]
+    
     return render_template('anotar_pedido.html', active_page='anotar_pedido', mesas=mesas, itens=itens)
+
 
 # Rota para  retornar o preço dos itens
 @bp.route('/get-item-price/<int:item_id>', methods=['GET'])

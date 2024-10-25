@@ -1,3 +1,4 @@
+<!-- anotar_pedidos.html -->
 {% extends "layouts/base.html" %}
 
 {% block title %}Anotar Pedido{% endblock %}
@@ -12,7 +13,6 @@
 <div id="message" style="display: none;"></div>
 
 <div class="order-form">
-    <!-- Dados do Cliente/Mesa -->
     <div class="customer-info">
         <h2>Dados do Cliente/Mesa</h2>
         <label for="customer-name">Nome do Cliente (opcional):</label>
@@ -27,7 +27,6 @@
         </select>
     </div>
 
-    <!-- Lista de Itens do Cardápio -->
     <div class="menu-list">
         <h2>Seleção de Itens</h2>
         <table class="menu-table">
@@ -39,18 +38,23 @@
                 </tr>
             </thead>
             <tbody>
-                {% for item in itens %}
-                <tr>
-                    <td>{{ item.nome_item }}</td>
-                    <td><input type="number" min="1" value="1" data-item-id="{{ item.id_item }}" class="item-quantity"></td>
-                    <td><input type="checkbox" data-item-id="{{ item.id_item }}" class="item-checkbox"></td>
-                </tr>
-                {% endfor %}
+                {% if itens %}
+                    {% for item in itens %}
+                    <tr>
+                        <td>{{ item.nome_item }}</td>
+                        <td><input type="number" min="1" value="1" data-item-id="{{ item.id_item }}" class="item-quantity"></td>
+                        <td><input type="checkbox" data-item-id="{{ item.id_item }}" class="item-checkbox"></td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">Nenhum item disponível no cardápio.</td>
+                    </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>
 
-    <!-- Resumo do Pedido -->
     <div class="order-summary">
         <h2>Resumo do Pedido</h2>
         <div class="summary-content" id="order-summary-content">
@@ -58,13 +62,11 @@
         </div>
     </div>
 
-    <!-- Feedback do Cliente -->
     <div class="customer-feedback">
         <h2>Feedback do Cliente</h2>
         <textarea id="feedback" name="feedback" placeholder="Insira uma nota ou feedback do cliente"></textarea>
     </div>
 
-    <!-- Botões de Ação -->
     <div class="action-buttons">
         <button class="btn-confirm" id="confirm-order">Confirmar Pedido</button>
         <button class="btn-cancel" id="cancel-order">Cancelar Pedido</button>
