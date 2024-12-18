@@ -10,10 +10,13 @@
 <div class="main-content" id="listagem-main-content">
     <h1 id="listagem-title">Listagem de Itens</h1>
     
+
     <div class="search-bar" id="listagem-search-bar">
         <input type="text" id="search" placeholder="Buscar itens..." onkeyup="buscarItens()">
     </div>
-    
+    {% if not itens %}
+        <p class="msg">O banco de dados não está configurado ou não contém itens. Verifique a configuração.</p>
+    {% else %}
     <table class="item-table" id="listagem-item-table">
         <thead>
             <tr>
@@ -29,6 +32,7 @@
             <!-- O corpo da tabela será preenchido dinamicamente pelo JavaScript -->
         </tbody>
     </table>
+    {% endif %}
 </div>
 
 <script>

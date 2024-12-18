@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, current_app
 from app import db
 from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa, RelatorioVendas
 from app.forms.addCardapio import ItemForm
 from datetime import datetime, timedelta
 from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
 from app import csrf
 from datetime import datetime
 import locale
@@ -229,19 +230,26 @@ def adicionar():
             db.session.commit()
 
             flash('Item adicionado com sucesso!', 'success')
-            return redirect(url_for('main.listagem'))
+            # Retorna para a mesma tela de adicionar
+            return render_template('cardapio/adicionar.html', form=form, active_page='cardapio')
 
         except Exception as e:
             db.session.rollback()
-            flash(f'Ocorreu um erro ao adicionar o item: {str(e)}', 'error')
+            error_message = "Ocorreu um erro ao adicionar o item. Por favor, tente novamente."
+            flash(error_message, 'error')
 
     return render_template('cardapio/adicionar.html', form=form, active_page='cardapio')
 
 
 @bp.route('/cardapio/listagem')
 def listagem():
-    itens = ItemCardapio.query.all()
-    return render_template('cardapio/listagem.html', itens=itens, active_page='cardapio')
+    try:
+        itens = ItemCardapio.query.all()
+    except Exception as e:
+        print(f"Erro ao acessar o banco de dados: {e}")
+        itens = []  # Retorne uma lista vazia como fallback
+    
+    return render_template('cardapio/listagem.html', itens=itens,active_page='cardapio')
 
 @bp.route('/cardapio/editar/<int:id>', methods=['GET', 'POST'])
 def editar_item(id):

@@ -11,11 +11,11 @@
 <!-- Mensagens de feedback -->
 {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-        <ul class="flashes">
-            {% for category, message in messages %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
+    <ul class="flashes">
+        {% for category, message in messages %}
+            <li class="flash-message {{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
     {% endif %}
 {% endwith %}
 
@@ -24,6 +24,7 @@
     <h1 id="adicionar-title">Adicionar Novo Item</h1>
     
     <form class="add-item-form" id="adicionar-form" action="{{ url_for('main.adicionar') }}" method="POST">
+        {{ form.csrf_token }}
         {{ form.hidden_tag() }}
         
         <label for="item-name">Nome do Item:</label>
@@ -39,4 +40,22 @@
     </form>
     
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const flashMessages = document.querySelectorAll(".flash-message");
+
+        flashMessages.forEach(function (message) {
+            setTimeout(() => {
+                message.style.transition = "opacity 0.5s";
+                message.style.opacity = 0;
+
+                // Após a transição, remova o elemento do DOM
+                setTimeout(() => {
+                    message.remove();
+                }, 500);
+            }, 5000); // 5 segundos
+        });
+    });
+</script>
 {% endblock %}
