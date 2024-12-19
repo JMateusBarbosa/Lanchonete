@@ -1,12 +1,17 @@
-//Tela Anotar pedidos
-document.addEventListener('DOMContentLoaded', function() {
-    const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-    const itemQuantities = document.querySelectorAll('.item-quantity');
-    const summaryContent = document.getElementById('order-summary-content');
-    const confirmButton = document.getElementById('confirm-order');
-    let selectedItems = [];
-    let totalPedido = 0.0; // Variável para armazenar o total do pedido
+// Tela Anotar Pedidos - Funções para gerenciar a seleção de itens, resumo do pedido e confirmação de pedidos
+// Este arquivo lida com a interação do usuário na tela de anotação de pedidos.
+// Ele permite que os itens sejam selecionados, suas quantidades sejam ajustadas, o resumo do pedido seja atualizado
+// dinamicamente e, ao confirmar, o pedido seja enviado ao servidor com os detalhes do cliente e do pedido.
 
+document.addEventListener('DOMContentLoaded', function() {
+    const itemCheckboxes = document.querySelectorAll('.item-checkbox');  // Checkbox para selecionar os itens
+    const itemQuantities = document.querySelectorAll('.item-quantity');  // Campos para definir as quantidades
+    const summaryContent = document.getElementById('order-summary-content');  // Área para exibir o resumo do pedido
+    const confirmButton = document.getElementById('confirm-order');  // Botão para confirmar o pedido
+    let selectedItems = [];  // Lista de itens selecionados no pedido
+    let totalPedido = 0.0;  // Variável para armazenar o total do pedido
+
+    // Adiciona eventos para atualizar o resumo ao selecionar ou alterar a quantidade de itens
     itemCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateSummary);
     });
@@ -15,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         quantityInput.addEventListener('input', updateSummary);
     });
 
+    // Função para obter o preço de um item a partir do servidor
     function getItemPrice(itemId) {
         return fetch(`/get-item-price/${itemId}`)
             .then(response => response.json())
@@ -23,29 +29,30 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('Erro ao buscar o preço:', data.error);
                     return 0;
                 }
-                return parseFloat(data.price); // Converte para float
+                return parseFloat(data.price);  // Retorna o preço do item em formato numérico
             })
             .catch(error => {
                 console.error('Erro:', error);
-                return 0; // Retorna 0 caso haja erro
+                return 0;  // Retorna 0 em caso de erro
             });
     }
 
+    // Função assíncrona para atualizar o resumo do pedido com os itens selecionados e seus preços
     async function updateSummary() {
-        selectedItems = [];
-        totalPedido = 0.0; // Resetar o total antes de recalcular
-        summaryContent.innerHTML = '';
+        selectedItems = [];  // Resetar a lista de itens selecionados
+        totalPedido = 0.0;  // Resetar o total antes de recalcular
+        summaryContent.innerHTML = '';  // Limpar conteúdo do resumo
 
         for (let checkbox of itemCheckboxes) {
-            if (checkbox.checked) {
-                const itemId = checkbox.getAttribute('data-item-id');
+            if (checkbox.checked) {  // Se o item estiver marcado
+                const itemId = checkbox.getAttribute('data-item-id');  // ID do item
                 const quantityInput = document.querySelector(`.item-quantity[data-item-id="${itemId}"]`);
-                const quantity = quantityInput.value;
+                const quantity = quantityInput.value;  // Quantidade do item
 
-                const itemPrice = await getItemPrice(itemId);
-                const totalPrice = (itemPrice * quantity).toFixed(2);
+                const itemPrice = await getItemPrice(itemId);  // Obter o preço do item
+                const totalPrice = (itemPrice * quantity).toFixed(2);  // Calcular o preço total para o item
 
-                totalPedido += parseFloat(totalPrice); // Adiciona ao total
+                totalPedido += parseFloat(totalPrice);  // Adicionar ao total do pedido
 
                 selectedItems.push({
                     itemId: itemId,
@@ -58,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        // Exibe o total do pedido ou uma mensagem se nenhum item for selecionado
         if (selectedItems.length === 0) {
             summaryContent.innerHTML = '<p>Nenhum item selecionado.</p>';
         } else {
@@ -65,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Evento para confirmar o pedido e enviá-lo para o servidor
     confirmButton.addEventListener('click', function() {
         const customerName = document.getElementById('customer-name').value || null;
         const tableNumber = document.getElementById('table-number').value || null;
@@ -81,14 +90,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 table_number: tableNumber,
                 feedback: feedback,
                 items: selectedItems,
-                total_pedido: totalPedido // Inclui o total do pedido na requisição
+                total_pedido: totalPedido  // Inclui o total do pedido na requisição
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 showMessage('Pedido realizado com sucesso!', 'success');
-                clearForm();
+                clearForm();  // Limpa o formulário após a confirmação
             } else {
                 showMessage('Erro ao realizar o pedido: ' + data.message, 'error');
             }
@@ -99,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Evento para cancelar a seleção de itens e limpar o resumo
     cancelButton.addEventListener('click', function() {
         // Limpa seleções e inputs
         document.querySelectorAll('.item-checkbox').forEach(checkbox => checkbox.checked = false);
@@ -106,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         summaryContent.innerHTML = '<p>Nenhum item selecionado.</p>';
     });
 
-    // Função para limpar o formulário
+    // Função para limpar o formulário após o envio ou cancelamento
     function clearForm() {
         document.getElementById('customer-name').value = '';
         document.getElementById('table-number').value = '';
@@ -121,8 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedItems = [];
     }
 
-
-    // Função para exibir mensagens de sucesso ou erro
+    // Função para exibir mensagens de sucesso ou erro ao usuário
     function showMessage(message, type) {
         const messageDiv = document.getElementById('message');
         messageDiv.textContent = message;
@@ -134,5 +143,4 @@ document.addEventListener('DOMContentLoaded', function() {
             messageDiv.style.display = 'none';
         }, 5000);
     }
-    
 });
