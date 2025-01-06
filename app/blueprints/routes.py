@@ -8,6 +8,7 @@ from app.models.models import Pedido, ItemPedido, ItemCardapio, Feedback, Mesa, 
 from app.forms.addCardapio import ItemForm
 from datetime import datetime, timedelta
 from sqlalchemy.exc import OperationalError
+from sqlalchemy import text
 from app import csrf
 
 bp = Blueprint('main', __name__)
@@ -203,21 +204,21 @@ def relatorios_vendas():
 
             # Executando a consulta para gerar o relatório
             relatorios = db.session.execute(text("""
-                SELECT 
+                SELECT
                     COUNT(p.id_pedido) AS total_pedidos,
                     SUM(COALESCE(p.total_pedido, 0)) AS total_vendas,
                     AVG(COALESCE(p.total_pedido, 0)) AS media_por_venda,
-                    (SELECT i.nome_item FROM itens_cardapio i 
-                    JOIN itens_pedido ip ON i.id_item = ip.id_item 
-                    GROUP BY ip.id_item 
-                    ORDER BY COUNT(ip.quantidade) DESC 
+                    (SELECT i.nome_item
+                    FROM itens_cardapio i
+                    JOIN itens_pedido ip ON i.id_item = ip.id_item
+                    GROUP BY i.nome_item
+                    ORDER BY COUNT(ip.quantidade) DESC
                     LIMIT 1) AS produto_mais_vendido
-                FROM 
-                    pedidos p
-                WHERE 
-                    p.data_pedido BETWEEN :data_inicio AND :data_fim + INTERVAL 1 DAY
-                    AND p.status = 'Concluído'
-            """), {'data_inicio': data_inicio, 'data_fim': data_fim})
+                FROM pedidos p
+                WHERE p.data_pedido BETWEEN :data_inicio AND :data_fim + INTERVAL '1 DAY'
+                AND p.status = 'Concluído'
+            """), {"data_inicio": data_inicio, "data_fim": data_fim})
+
 
             relatorio = relatorios.fetchone()
 
